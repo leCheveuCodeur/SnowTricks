@@ -51,7 +51,7 @@ class Category
 
     public function setName(string $name): self
     {
-        $this->name = ucfirst($name);
+        $this->name = ucwords($name);
 
         return $this;
     }

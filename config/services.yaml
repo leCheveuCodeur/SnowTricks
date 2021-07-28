@@ -30,3 +30,13 @@ services:
                     entity: App\Entity\Category,
                 },
             ]
+
+    App\Doctrine\Listener\TrickSlugListener:
+        tags:
+            [
+                {
+                    name: "doctrine.orm.entity_listener",
+                    event: prePersist,
+                    entity: App\Entity\Trick,
+                },
+            ]

@@ -73,7 +73,7 @@ class Trick
 
     public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = \ucfirst($title);
 
         return $this;
     }
@@ -97,7 +97,7 @@ class Trick
 
     public function setContent(string $content): self
     {
-        $this->content = $content;
+        $this->content = \ucfirst($content);
 
         return $this;
     }
