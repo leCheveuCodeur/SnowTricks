@@ -5,40 +5,30 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\Trick;
 use App\Entity\Category;
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
-    protected $categoryRepository, $slugger;
+    protected $categoryRepository, $slugger, $encoder;
 
-    public function __construct(CategoryRepository $categoryRepository, SluggerInterface $slugger)
+    public function __construct(CategoryRepository $categoryRepository, SluggerInterface $slugger, UserPasswordHasherInterface $encoder)
     {
         $this->categoryRepository = $categoryRepository;
         $this->slugger = $slugger;
+        $this->encoder = $encoder;
     }
 
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
 
-        // Category
         $categories = ['grabs', 'flips & off axis', 'slides'];
 
-        foreach ($categories as $category_name) {
-            $category = new Category;
-            $category->setName($category_name);
-
-            $manager->persist($category);
-        }
-        $manager->flush();
-
-        // Trick
         $tricks = [
             [
                 "Frontside 720", 1, "une rotation de 2 tours en frontside",
@@ -91,7 +81,38 @@ class AppFixtures extends Fixture
                 []
             ]
         ];
+        // User
+        $admin = new User;
+        $hash = $this->encoder->hashPassword($admin, 'password');
 
+        $admin->setPseudo('Admin')
+            ->setEmail('admin@gmail.com')
+            ->setPassword($hash)
+            ->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin);
+
+        for ($u = 0; $u < 5; $u++) {
+            $user = new User;
+
+            $hash = $this->encoder->hashPassword($user, 'password');
+
+            $user->setPseudo($faker->userName())
+                ->setEmail("user$u@gmail.com")
+                ->setPassword($hash);
+
+            $manager->persist($user);
+        }
+
+        // Category
+        foreach ($categories as $category_name) {
+            $category = new Category;
+            $category->setName($category_name);
+
+            $manager->persist($category);
+        }
+        $manager->flush();
+
+        // Trick
         foreach ($tricks as $trick_data) {
             $trick_category = \array_search($trick_data[1], \array_flip($categories));
 
