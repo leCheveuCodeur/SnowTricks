@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class File
 {
+    const TYPE_IMG = 1;
+    const TYPE_VIDEO = 2;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -28,30 +31,21 @@ class File
     private $path;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $img;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $video;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $avatar;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="files")
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="files")
+     * @ORM\Column(type="integer")
      */
-    private $user;
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Contribution::class, inversedBy="files")
+     */
+    private $contribution;
+
 
     public function getId(): ?int
     {
@@ -82,42 +76,6 @@ class File
         return $this;
     }
 
-    public function getImg(): ?int
-    {
-        return $this->img;
-    }
-
-    public function setImg(int $img): self
-    {
-        $this->img = $img;
-
-        return $this;
-    }
-
-    public function getVideo(): ?int
-    {
-        return $this->video;
-    }
-
-    public function setVideo(int $video): self
-    {
-        $this->video = $video;
-
-        return $this;
-    }
-
-    public function getAvatar(): ?int
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(int $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
     public function getTrick(): ?Trick
     {
         return $this->trick;
@@ -130,14 +88,26 @@ class File
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getType(): ?int
     {
-        return $this->user;
+        return $this->type;
     }
 
-    public function setUser(?User $user): self
+    public function setType(int $type): self
     {
-        $this->user = $user;
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getContribution(): ?Contribution
+    {
+        return $this->contribution;
+    }
+
+    public function setContribution(?Contribution $contribution): self
+    {
+        $this->contribution = $contribution;
 
         return $this;
     }

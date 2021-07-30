@@ -14,6 +14,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_CONTRIBUTOR = 'ROLE_CONTRIBUTOR';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -53,17 +57,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=File::class, mappedBy="user")
+     * @ORM\ManyToMany(targetEntity=Trick::class, inversedBy="users")
      */
-    private $files;
+    private $tricks;
 
     public function __construct()
     {
         $this->contributions = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->files = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -227,31 +230,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|File[]
+     * @return Collection|Trick[]
      */
-    public function getFiles(): Collection
+    public function getTricks(): Collection
     {
-        return $this->files;
+        return $this->tricks;
     }
 
-    public function addFile(File $file): self
+    public function addTricks(Trick $trick): self
     {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-            $file->setUser($this);
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
         }
 
         return $this;
     }
 
-    public function removeFile(File $file): self
+    public function removeTricks(Trick $trick): self
     {
-        if ($this->files->removeElement($file)) {
-            // set the owning side to null (unless already changed)
-            if ($file->getUser() === $this) {
-                $file->setUser(null);
-            }
-        }
+        $this->tricks->removeElement($trick);
 
         return $this;
     }

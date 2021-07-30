@@ -32,17 +32,17 @@ class Trick
     /**
      * @ORM\Column(type="text")
      */
+    private $lead_in;
+
+    /**
+     * @ORM\Column(type="text")
+     */
     private $content;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
      */
     private $category;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Contribution::class, mappedBy="trick")
-     */
-    private $contributions;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick")
@@ -54,11 +54,17 @@ class Trick
      */
     private $files;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="trick")
+     */
+    private $users;
+
     public function __construct()
     {
-        $this->contributions = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -110,36 +116,6 @@ class Trick
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Contribution[]
-     */
-    public function getContributions(): Collection
-    {
-        return $this->contributions;
-    }
-
-    public function addContribution(Contribution $contribution): self
-    {
-        if (!$this->contributions->contains($contribution)) {
-            $this->contributions[] = $contribution;
-            $contribution->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContribution(Contribution $contribution): self
-    {
-        if ($this->contributions->removeElement($contribution)) {
-            // set the owning side to null (unless already changed)
-            if ($contribution->getTrick() === $this) {
-                $contribution->setTrick(null);
-            }
-        }
 
         return $this;
     }
@@ -199,6 +175,45 @@ class Trick
             if ($file->getTrick() === $this) {
                 $file->setTrick(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getLeadIn(): ?string
+    {
+        return $this->lead_in;
+    }
+
+    public function setLeadIn(string $lead_in): self
+    {
+        $this->lead_in = $lead_in;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addTricks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeTricks($this);
         }
 
         return $this;
