@@ -56,13 +56,20 @@ class Contribution
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=File::class, mappedBy="contribution")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution")
      */
-    private $files;
+    private $videos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution")
+     */
+    private $images;
 
     public function __construct()
     {
         $this->files = new ArrayCollection();
+        $this->videos = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,29 +162,59 @@ class Contribution
     }
 
     /**
-     * @return Collection|File[]
+     * @return Collection|Video[]
      */
-    public function getFiles(): Collection
+    public function getVideos(): Collection
     {
-        return $this->files;
+        return $this->videos;
     }
 
-    public function addFile(File $file): self
+    public function addVideo(Video $video): self
     {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-            $file->setContribution($this);
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setContribution($this);
         }
 
         return $this;
     }
 
-    public function removeFile(File $file): self
+    public function removeVideo(Video $video): self
     {
-        if ($this->files->removeElement($file)) {
+        if ($this->videos->removeElement($video)) {
             // set the owning side to null (unless already changed)
-            if ($file->getContribution() === $this) {
-                $file->setContribution(null);
+            if ($video->getContribution() === $this) {
+                $video->setContribution(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setContribution($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getContribution() === $this) {
+                $image->setContribution(null);
             }
         }
 

@@ -5,15 +5,17 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\File;
 use App\Entity\User;
+use App\Entity\Image;
 use App\Entity\Trick;
-use App\Entity\Category;
+use App\Entity\Video;
 use App\Entity\Comment;
+use App\Entity\Category;
 use App\Entity\Contribution;
 use App\Repository\UserRepository;
 use App\Repository\TrickRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\ContributionRepository;
 use Doctrine\Persistence\ObjectManager;
+use App\Repository\ContributionRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -166,27 +168,25 @@ class AppFixtures extends Fixture
 
         // IMG Files
         foreach ($tricks as $trick_data) {
-            foreach ($trick_data[5] as $trick_file) {
-                $file = new File;
-                $file->setName(\preg_replace("/\.\w+$/", '', $trick_file))
-                    ->setPath($trick_file)
-                    ->setType(File::TYPE_IMG)
+            foreach ($trick_data[5] as $trick_img) {
+                $img = new Image;
+                $img->setName(\preg_replace("/\.\w+$/", '', $trick_img))
+                    ->setPath($trick_img)
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 
-                $manager->persist($file);
+                $manager->persist($img);
             }
         }
 
-        // VIDEO Files
+        // Video
         foreach ($tricks as $trick_data) {
-            foreach ($trick_data[6] as $trick_file) {
-                $file = new File;
-                $file->setName($faker->sentence(\mt_rand(1, 5)))
-                    ->setPath($trick_file)
-                    ->setType(File::TYPE_VIDEO)
+            foreach ($trick_data[6] as $trick_video) {
+                $video = new Video;
+                $video->setName($faker->sentence(\mt_rand(1, 5)))
+                    ->setPath($trick_video)
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 
-                $manager->persist($file);
+                $manager->persist($video);
             }
         }
 

@@ -2,17 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\FileRepository;
+use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=FileRepository::class)
+ * @ORM\Entity(repositoryClass=ImageRepository::class)
  */
-class File
+class Image
 {
-    const TYPE_IMG = 1;
-    const TYPE_VIDEO = 2;
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,21 +28,15 @@ class File
     private $path;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="files")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="images")
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $type;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Contribution::class, inversedBy="files")
+     * @ORM\ManyToOne(targetEntity=Contribution::class, inversedBy="images")
      */
     private $contribution;
-
 
     public function getId(): ?int
     {
@@ -84,18 +75,6 @@ class File
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
-
-        return $this;
-    }
-
-    public function getType(): ?int
-    {
-        return $this->type;
-    }
-
-    public function setType(int $type): self
-    {
-        $this->type = $type;
 
         return $this;
     }

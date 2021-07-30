@@ -50,14 +50,19 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=File::class, mappedBy="trick", orphanRemoval=true)
-     */
-    private $files;
-
-    /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="trick")
      */
     private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
+     */
+    private $videos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
+     */
+    private $images;
 
     public function __construct()
     {
@@ -65,6 +70,8 @@ class Trick
         $this->files = new ArrayCollection();
         $this->contributions = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->videos = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,36 +157,6 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection|File[]
-     */
-    public function getFiles(): Collection
-    {
-        return $this->files;
-    }
-
-    public function addFile(File $file): self
-    {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-            $file->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFile(File $file): self
-    {
-        if ($this->files->removeElement($file)) {
-            // set the owning side to null (unless already changed)
-            if ($file->getTrick() === $this) {
-                $file->setTrick(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getLeadIn(): ?string
     {
         return $this->lead_in;
@@ -214,6 +191,66 @@ class Trick
     {
         if ($this->users->removeElement($user)) {
             $user->removeTricks($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
         }
 
         return $this;
