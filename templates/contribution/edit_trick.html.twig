@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+{% form_theme formView 'bootstrap_5_layout.html.twig' %}
+
+{% block title %}Contribuer
+{% endblock %}
+
+{% block body %}
+
+	<div class="container-xxl">
+		<h1>Contribuer -
+			{% if trick %}
+				Editer le Trick :
+			{% else %}
+				Créer un Trick :
+			{% endif %}
+		</h1>
+
+		{% include "contribution/_form.html.twig" %}
+
+	{% endblock %}

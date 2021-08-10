@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ContributionRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ContributionRepository::class)
@@ -45,29 +47,28 @@ class Contribution
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="contributions")
-     */
-    private $trick;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="contributions")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution", cascade={"persist"})
      */
     private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution")
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution", cascade={"persist"})
      */
     private $images;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="contributions")
+     */
+    private $trick;
+
+
     public function __construct()
     {
-        $this->files = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
     }
@@ -94,8 +95,9 @@ class Contribution
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(): self
     {
+        $date = new DateTime();
         $this->date = $date;
 
         return $this;
@@ -121,18 +123,6 @@ class Contribution
     public function setLeadIn(string $lead_in): self
     {
         $this->lead_in = $lead_in;
-
-        return $this;
-    }
-
-    public function getTrick(): ?Trick
-    {
-        return $this->trick;
-    }
-
-    public function setTrick(?Trick $trick): self
-    {
-        $this->trick = $trick;
 
         return $this;
     }
@@ -217,6 +207,18 @@ class Contribution
                 $image->setContribution(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
         return $this;
     }

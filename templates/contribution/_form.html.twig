@@ -1,0 +1,58 @@
+{{ form_start(formView) }}
+
+{{ form_errors(formView) }}
+
+<div class="row">
+	<div class="col">
+		{% if trick %}
+			<h2>
+				{{ trick.title }}
+			</h2>
+
+			{% for image in trick.images %}
+				{# Show only validated images of the trick #}
+				{% if image.trick %}
+					<div class="card d-inline-block">
+						<img src="{{ asset('/img_uploads/'~ image.path)}}" alt="{{ image.title }}" width="150" height="150">
+						<div class="card-body">
+							<h5 class="card-title">{{ image.title }}
+							</h5>
+						</div>
+					</div>
+
+					{# <a href="{{path('delete_image', {id:image.id})}}" data-delete data-token="{{csrf_token('delete' ~ image.id)}}">Supprimer</a> #}
+				{% endif %}
+			{% endfor %}
+
+		{% else %}
+			{{ form_row(formView.title) }}
+		{% endif %}
+		{{ form_row(formView.lead_in) }}
+		{{ form_row(formView.content)}}
+		{% if not trick %}
+			{{ form_row(formView.category)}}
+		{% endif %}
+
+		<button class="btn btn-success bi bi-plus-lg" data-add data-collection-holder-class="images">
+			Ajouter une image</button>
+
+		<div class="images" data-index="{{ formView.images|length > 0 ? formView.images|last.vars.name + 1 : 0 }}" data-prototype="{{form_widget(formView.images.vars.prototype)|e('html_attr')}}">
+			{% for image in formView.images %}
+				<div class="card m-2 px-2 py-3">
+					{{ form_row(image.title)}}
+					{{ form_row(image.description)}}
+					{{ form_row(image.path)}}
+				</div>
+
+			{% endfor %}
+		</div>
+
+	</div>
+</div>
+
+<button class="submit btn btn-primary">
+	<i class="fas fa-save"></i>
+	Soumettre !
+</button>
+{{ form_end(formView) }}</div>{% block script %}
+<script src="{{ asset('src/js/image.js') }}"></script>{% endblock %}

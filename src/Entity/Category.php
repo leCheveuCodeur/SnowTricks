@@ -30,19 +30,19 @@ class Category
     private $slug;
 
     /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category")
-     */
-    private $tricks;
-
-    /**
      * @ORM\OneToMany(targetEntity=Contribution::class, mappedBy="category")
      */
     private $contributions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category")
+     */
+    private $tricks;
+
     public function __construct()
     {
-        $this->tricks = new ArrayCollection();
         $this->contributions = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,36 +75,6 @@ class Category
     }
 
     /**
-     * @return Collection|Trick[]
-     */
-    public function getTricks(): Collection
-    {
-        return $this->tricks;
-    }
-
-    public function addTrick(Trick $trick): self
-    {
-        if (!$this->tricks->contains($trick)) {
-            $this->tricks[] = $trick;
-            $trick->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTrick(Trick $trick): self
-    {
-        if ($this->tricks->removeElement($trick)) {
-            // set the owning side to null (unless already changed)
-            if ($trick->getCategory() === $this) {
-                $trick->setCategory(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Contribution[]
      */
     public function getContributions(): Collection
@@ -128,6 +98,36 @@ class Category
             // set the owning side to null (unless already changed)
             if ($contribution->getCategory() === $this) {
                 $contribution->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Trick[]
+     */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
+    public function addTrick(Trick $trick): self
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrick(Trick $trick): self
+    {
+        if ($this->tricks->removeElement($trick)) {
+            // set the owning side to null (unless already changed)
+            if ($trick->getCategory() === $this) {
+                $trick->setCategory(null);
             }
         }
 

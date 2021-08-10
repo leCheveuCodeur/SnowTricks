@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\File;
 use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Trick;
@@ -49,37 +48,37 @@ class AppFixtures extends Fixture
         $tricks = [
             [
                 "admin@gmail.com", "Frontside 720", $categories[1], "une rotation de 2 tours en frontside", "",
-                ["colin-lloyd-CVB44XCYyHA-unsplash.jpg", "colin-lloyd-pzZmPqPdAIE-unsplash.jpg"],
+                ["colin-lloyd-CVB44XCYyHA-unsplash-6106326bf0da6.jpg", "colin-lloyd-pzZmPqPdAIE-unsplash-6106326bf271c.jpg"],
                 ["https://youtu.be/1vtZXU15e38", "https://youtu.be/H2MKP1epC7k"]
             ],
             [
                 "admin@gmail.com", "Frontside 540",  $categories[1], "saut où l’on fait un tour et demi en l’air", "",
-                ["damiano-lingauri-OKBP1D8Wr4c-unsplash.jpg"],
+                ["damiano-lingauri-OKBP1D8Wr4c-unsplash-61063372b108a.jpg"],
                 ["https://youtu.be/FMHiSF0rHF8"]
             ],
             [
                 "admin@gmail.com", "Nose Grab",  $categories[0], "consiste à saisir la pointe avant de la planche lors d'un saut", "",
-                ["pexels-pixabay-209817.jpg"],
+                ["pexels-pixabay-209817-610634b493deb.jpg"],
                 ["https://youtu.be/M-W7Pmo-YMY"]
             ],
             [
                 "user0@gmail.com", "Tail Slide",  $categories[2], "consiste à glisser sur une barre de slide sur l'arrière de la planche", "",
-                ["pexels-tyler-tornberg-1630716.jpg"],
+                ["pexels-tyler-tornberg-1630716-6106353392224.jpg"],
                 ["https://youtu.be/HRNXjMBakwM"]
             ],
             [
                 "user0@gmail.com", "Slide",  $categories[2], "consiste à glisser sur une barre de slide avec la planche dans l'axe de la barre", "",
-                ["jeffrey-brandjes-GCaV0QdCexQ-unsplash.jpg", "pexels-ryan-leeper-4580974.jpg"],
+                ["jeffrey-brandjes-GCaV0QdCexQ-unsplash-610634e72a9c9.jpg", "pexels-ryan-leeper-4580974-610634e72ca25.jpg"],
                 ["https://youtu.be/NeY6sSsbbZw"]
             ],
             [
                 "user0@gmail.com", "Japan Air",  $categories[0], "grab de snowboard avancé qui ne manquera pas de faire tourner quelques têtes sur la montagne", "",
-                ["lucas-ludwig-WLjpktG2ijY-unsplash.jpg"],
+                ["lucas-ludwig-WLjpktG2ijY-unsplash-61063469723b1.jpg"],
                 ["https://youtu.be/X_WhGuIY9Ak"]
             ],
             [
                 "user0@gmail.com", "Double McTwist 1260",  $categories[1], "glissade avec planche perpendiculaire à la barre de slide avec la barre du coté avant de la planche", "",
-                ["jorg-angeli-cCzeLwUCmnM-unsplash.jpg"],
+                ["jorg-angeli-cCzeLwUCmnM-unsplash-61063444998dc.jpg"],
                 ["https://youtu.be/qIr2ki4nWkU"]
             ],
             [
@@ -134,9 +133,9 @@ class AppFixtures extends Fixture
 
         // Tricks
         foreach ($tricks as $trick_data) {
-            $trick_category = \array_search($trick_data[2], \array_flip($categories));
+            $trick_category = \array_search($trick_data[2], $categories);
 
-            $category = $this->categoryRepository->findOneBy(['name' => $trick_category]);
+            $category = $this->categoryRepository->findOneBy(['name' => $categories[$trick_category]]);
 
             $lead_in = !empty($trick_data[3]) ? $trick_data[3] :  $faker->sentence();
             $content = !empty($trick_data[4]) ? $trick_data[4] :  $faker->paragraph();
@@ -170,8 +169,8 @@ class AppFixtures extends Fixture
         foreach ($tricks as $trick_data) {
             foreach ($trick_data[5] as $trick_img) {
                 $img = new Image;
-                $img->setName(\preg_replace("/\.\w+$/", '', $trick_img))
-                    ->setPath($trick_img)
+                $img->setPath($trick_img)
+                    ->setTitle()
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 
                 $manager->persist($img);

@@ -40,19 +40,14 @@ class Trick
     private $content;
 
     /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="tricks")
+     */
+    private $users;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
      */
     private $category;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick")
-     */
-    private $comments;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="trick")
-     */
-    private $users;
 
     /**
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
@@ -64,14 +59,24 @@ class Trick
      */
     private $images;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Contribution::class, mappedBy="trick")
+     */
+    private $contributions;
+
+
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
-        $this->files = new ArrayCollection();
-        $this->contributions = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,48 +116,6 @@ class Trick
     public function setContent(string $content): self
     {
         $this->content = \ucfirst($content);
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getTrick() === $this) {
-                $comment->setTrick(null);
-            }
-        }
 
         return $this;
     }
@@ -250,6 +213,78 @@ class Trick
             // set the owning side to null (unless already changed)
             if ($image->getTrick() === $this) {
                 $image->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contribution[]
+     */
+    public function getContributions(): Collection
+    {
+        return $this->contributions;
+    }
+
+    public function addContribution(Contribution $contribution): self
+    {
+        if (!$this->contributions->contains($contribution)) {
+            $this->contributions[] = $contribution;
+            $contribution->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContribution(Contribution $contribution): self
+    {
+        if ($this->contributions->removeElement($contribution)) {
+            // set the owning side to null (unless already changed)
+            if ($contribution->getTrick() === $this) {
+                $contribution->setTrick(null);
             }
         }
 
