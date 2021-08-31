@@ -23,6 +23,7 @@ class Contribution
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max=255, maxMessage="Le titre de l'image ne doit pas dépasser {{ limit }} caractères.")
      */
     private $title;
 
@@ -43,6 +44,7 @@ class Contribution
 
     /**
      * @ORM\ManyToOne(targetEntity=user::class, inversedBy="contributions")
+     * @Assert\Valid()
      */
     private $user;
 
@@ -52,12 +54,14 @@ class Contribution
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @Assert\Valid()
      */
     private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @Assert\Valid()
      */
     private $images;
 

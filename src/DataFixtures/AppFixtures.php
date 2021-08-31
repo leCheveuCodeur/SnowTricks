@@ -170,6 +170,7 @@ class AppFixtures extends Fixture
             foreach ($trick_data[5] as $trick_img) {
                 $img = new Image;
                 $img->setPath($trick_img)
+                    ->setFileName($trick_img)
                     ->setTitle()
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 

@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\TrickRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TrickRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -21,6 +23,7 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max=255, maxMessage="Le titre ne doit pas dépasser {{ limit }} caractères. (Actuellement: {{ value }} caractères)")
      */
     private $title;
 
@@ -56,6 +59,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
+     * @Groups("trick:read")
      */
     private $images;
 
@@ -195,6 +199,11 @@ class Trick
     public function getImages(): Collection
     {
         return $this->images;
+    }
+
+    public function getImageInFront()
+    {
+        return $this->images->matching(TrickRepository::createImgInFrontCriteria());
     }
 
     public function addImage(Image $image): self

@@ -92,9 +92,8 @@ class ContributionType extends AbstractType
                     CollectionType::class,
                     [
                         'entry_type' => ImageType::class,
-                        'entry_options' => [
-                            'label' => false
-                        ],
+                        'entry_options' => ['label' => false],
+                        'attr' => ['class' => 'path_field'],
                         'label' => false,
                         'by_reference' => false,
                         'allow_add' => true,
@@ -102,36 +101,30 @@ class ContributionType extends AbstractType
                         'required' => false
                     ]
                 );
-            // ->add(
-            //     'images',
-            //     FileType::class,
-            //     [
-            //         'label' => 'Ajouter des images',
-            //         'multiple' => \true,
-            //         'mapped' => \false,
-            //         'required' => \false,
-            //         'attr' => [
-            //             'onchange' => 'previewImage($this)'
-            //         ],
-            //         'constraints' => [
-            //             new All([
-            //                 'constraints' => [
-            //                     new Image([
-            //                         'mimeTypes' => [
-            //                             'image/jpg',
-            //                             'image/jpeg',
-            //                             'image/png'
-            //                         ],
-            //                         'mimeTypesMessage' => 'Ce fichier n\'est pas une image valide.'
-            //                     ])
-            //                 ]
-            //             ])
-            //         ]
-            //     ]
-            // );
         });
-    }
 
+        // $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+        //     $data = $event->getData();
+        //     $images = $data['images'];
+        //     $oldKey = '';
+        //     foreach ($images as $key => $image) {
+        //         if ($key < $oldKey) {
+        //             \dump($key);
+        //             unset($images[$key]);
+        //             $event->getForm()->get('images')->offsetUnset($key);
+        //         }
+        //         $oldKey = $key;
+        //     }
+
+            // \dd($images, $event, $event->getForm()->get('images'));
+
+            // /** @var UploadedFile */
+            // $file = $event->getForm()->get('path')->getData();
+            // if ($image !== null && $image->getPath() === \null && $file !== null) {
+            //     $image->setPath(\pathinfo($file->getClientOriginalName(), \PATHINFO_BASENAME));
+            // }
+        // });
+    }
 
     public function configureOptions(OptionsResolver $resolver)
     {
