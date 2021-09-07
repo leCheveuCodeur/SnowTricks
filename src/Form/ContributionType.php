@@ -44,7 +44,8 @@ class ContributionType extends AbstractType
                         [
                             'label' => 'Nom de la figure',
                             'attr' => [
-                                'placeholder' => 'Tapez ici le nom'
+                                'placeholder' => 'Tapez ici le nom',
+                                'maxlength'=> 70
                             ]
                         ]
                     )
@@ -72,7 +73,8 @@ class ContributionType extends AbstractType
                         'label' => 'Intro courte de la figure',
                         'data' => $isExistantTrick ? $isExistantTrick->getLeadIn() : '',
                         'attr' => [
-                            'placeholder' => $isExistantTrick ? '' : 'Tapez ici l\'intro'
+                            'placeholder' => $isExistantTrick ? '' : 'Tapez ici l\'intro',
+                            'maxlength'=> 160
                         ]
                     ]
                 )
@@ -98,7 +100,6 @@ class ContributionType extends AbstractType
                         'by_reference' => false,
                         'allow_add' => true,
                         'allow_delete' => true,
-                        'required' => false
                     ]
                 );
         });

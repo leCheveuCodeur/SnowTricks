@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ImageRepository;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,18 +22,9 @@ class Image
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max=255, maxMessage="Le titre de l'image ne doit pas dépasser {{ limit }} caractères.")
      * @Groups("trick:read")
      */
     private $title;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max=255, maxMessage="Le nom du fichier ne doit pas dépasser {{ limit }} caractères.")
-     * @Assert\NotBlank(message="Il manque l'ajout du fichier image.")
-     * @Groups("trick:read")
-     */
-    private $path;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -73,26 +63,9 @@ class Image
         return $this->title;
     }
 
-    public function setTitle(?string $title = \null): self
+    public function setTitle(string $title): self
     {
-        if (empty($title)) {
-            $slugger = new AsciiSlugger('fr_Fr');
-            $title = $slugger->slug(\preg_replace("/\.\w+$/", '', $this->path), ' ');
-        }
-
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(string $path): self
-    {
-        $this->path = $path;
 
         return $this;
     }

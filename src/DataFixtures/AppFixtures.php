@@ -21,7 +21,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    protected $userRepository, $categoryRepository, $trickRepository, $contributionRepository, $slugger, $encoder;
+    protected $userRepository, $categoryRepository, $trickRepository, $contributionRepository, $slugger, $encoder, $asciiSlugger;
 
     public function __construct(
         UserRepository $userRepository,
@@ -169,9 +169,8 @@ class AppFixtures extends Fixture
         foreach ($tricks as $trick_data) {
             foreach ($trick_data[5] as $trick_img) {
                 $img = new Image;
-                $img->setPath($trick_img)
-                    ->setFileName($trick_img)
-                    ->setTitle()
+                $img->setFileName($trick_img)
+                    ->setTitle($this->slugger->slug(\preg_replace("/\.\w+$/", '', $trick_img), ' ', 'fr_Fr'))
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 
                 $manager->persist($img);
@@ -182,8 +181,8 @@ class AppFixtures extends Fixture
         foreach ($tricks as $trick_data) {
             foreach ($trick_data[6] as $trick_video) {
                 $video = new Video;
-                $video->setName($faker->sentence(\mt_rand(1, 5)))
-                    ->setPath($trick_video)
+                $video->setTitle($faker->sentence(\mt_rand(1, 5)))
+                    ->setLink($trick_video)
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 
                 $manager->persist($video);

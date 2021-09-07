@@ -20,12 +20,12 @@ class Video
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $path;
+    private $link;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
@@ -42,26 +42,26 @@ class Video
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getPath(): ?string
+    public function getLink(): ?string
     {
-        return $this->path;
+        return $this->link;
     }
 
-    public function setPath(string $path): self
+    public function setLink(string $link): self
     {
-        $this->path = $path;
+        $this->link = $link;
 
         return $this;
     }
