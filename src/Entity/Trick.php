@@ -54,6 +54,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
+     * @Groups("trick:read")
      */
     private $videos;
 

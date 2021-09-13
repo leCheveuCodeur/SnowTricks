@@ -42,11 +42,12 @@ class ImageType extends AbstractType
                                 'image/jpeg',
                                 'image/png'
                             ],
-                            'mimeTypesMessage' => 'Veuillez sélectionner une image au format ".jpeg",".jpg" ou ".png", merci !'
+                            'mimeTypesMessage' => "Format d'image accepté: .jpeg / .jpg / .png"
                         ])
                     ],
                     'attr' => [
-                        'accept' => "image/png, image/jpeg"
+                        'accept' => "image/png, image/jpeg",
+                        'title' => "Format d'image accepté: .jpeg / .jpg / .png"
                     ]
                 ]
             )

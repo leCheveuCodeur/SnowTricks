@@ -15,13 +15,14 @@ use App\Repository\TrickRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\ContributionRepository;
+use App\Service\EmbedlyUrlHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    protected $userRepository, $categoryRepository, $trickRepository, $contributionRepository, $slugger, $encoder, $asciiSlugger;
+    protected $userRepository, $categoryRepository, $trickRepository, $contributionRepository, $slugger, $encoder, $asciiSlugger, $embedlyUrlHelper;
 
     public function __construct(
         UserRepository $userRepository,
@@ -29,7 +30,8 @@ class AppFixtures extends Fixture
         TrickRepository $trickRepository,
         ContributionRepository $contributionRepository,
         SluggerInterface $slugger,
-        UserPasswordHasherInterface $encoder
+        UserPasswordHasherInterface $encoder,
+        EmbedlyUrlHelper $embedlyUrlHelper
     ) {
         $this->userRepository = $userRepository;
         $this->categoryRepository = $categoryRepository;
@@ -37,6 +39,7 @@ class AppFixtures extends Fixture
         $this->contributionRepository = $contributionRepository;
         $this->slugger = $slugger;
         $this->encoder = $encoder;
+        $this->embedlyUrlHelper = $embedlyUrlHelper;
     }
 
     public function load(ObjectManager $manager)
@@ -49,7 +52,7 @@ class AppFixtures extends Fixture
             [
                 "admin@gmail.com", "Frontside 720", $categories[1], "une rotation de 2 tours en frontside", "",
                 ["colin-lloyd-CVB44XCYyHA-unsplash-6106326bf0da6.jpg", "colin-lloyd-pzZmPqPdAIE-unsplash-6106326bf271c.jpg"],
-                ["https://youtu.be/1vtZXU15e38", "https://youtu.be/H2MKP1epC7k"]
+                ["https://www.youtube.com/embed/1vtZXU15e38","https://youtu.be/H2MKP1epC7k"]
             ],
             [
                 "admin@gmail.com", "Frontside 540",  $categories[1], "saut où l’on fait un tour et demi en l’air", "",
@@ -182,7 +185,7 @@ class AppFixtures extends Fixture
             foreach ($trick_data[6] as $trick_video) {
                 $video = new Video;
                 $video->setTitle($faker->sentence(\mt_rand(1, 5)))
-                    ->setLink($trick_video)
+                    ->setLink($this->embedlyUrlHelper->embed($trick_video))
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 
                 $manager->persist($video);

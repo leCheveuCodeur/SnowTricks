@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Entity\Contribution;
 use App\Form\ContributionType;
 use Symfony\Component\Form\Form;
@@ -36,6 +37,15 @@ class ContributionController extends AbstractController
                     ->setFileName($image->getFileName());
                 $contribution->addImage($imageCopy);
             }
+
+            /** @var Video $video */
+            foreach ($trick->getVideos() as $video) {
+                $videoCopy = new Video;
+                $videoCopy->setVideoTarget($video->getId())
+                    ->setTitle($video->getTitle())
+                    ->setLink($video->getLink());
+                $contribution->addVideo($videoCopy);
+            }
         }
         // End of init
         //--------------------------------------------------------------------------------------------------------------------------------
@@ -47,6 +57,7 @@ class ContributionController extends AbstractController
             $contributionFilesCopy = $request->files->all('contribution');
 
             $imagesInTheRequest = (array)$contributionRequestCopy['images'];
+            $videosInTheRequest = (array)$contributionRequestCopy['videos'];
             if ($contributionFilesCopy) {
                 $filesInTheRequest = (array)$contributionFilesCopy['images'];
             }
@@ -59,7 +70,6 @@ class ContributionController extends AbstractController
                 if ($key > $oldKey) {
                     $reindexedImages[] = $image;
                     if ($contributionFilesCopy && key_exists($key, $filesInTheRequest)) {
-                        \dump('test');
                         $reindexedFiles[$index] = $filesInTheRequest[$key];
                     }
                 }
@@ -68,7 +78,20 @@ class ContributionController extends AbstractController
                 $index++;
             }
 
+            $oldKey = -1;
+            $index = 0;
+            $reindexedVideos = [];
+            foreach ($videosInTheRequest as $key => $video) {
+                if ($key > $oldKey) {
+                    $reindexedVideos[] = $video;
+                }
+
+                $oldKey = $key;
+                $index++;
+            }
+
             $contributionRequestCopy['images'] = $reindexedImages;
+            $contributionRequestCopy['videos'] = $reindexedVideos;
             $contributionFilesCopy['images'] = $reindexedFiles;
             // Overwrite the existing request with our copy
             $request->request->set('contribution', $contributionRequestCopy);
@@ -79,13 +102,14 @@ class ContributionController extends AbstractController
         //--------------------------------------------------------------------------------------------------------------------------------
 
         $formView = $this->createForm(ContributionType::class, $contribution);
-
         $formView->handleRequest($request);
 
-        /** @var Form */
-        $imagesForm = $formView->get('images');
-
         if ($formView->isSubmitted() && $formView->isValid()) {
+
+            \dd($formView, $contribution, $request);
+
+            /** @var Form */
+            $imagesForm = $formView->get('images');
 
             foreach ($request->files->get('contribution')['images'] as $key => $upload) {
                 /** @var UploadedFile */

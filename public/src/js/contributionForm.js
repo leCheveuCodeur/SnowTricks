@@ -10,18 +10,15 @@ function create(htmlStr) {
 }
 
 window.onload = () => {
-	var collectionHolder = document.getElementById("images");
-	if (collectionHolder.dataset.imagesContribution !== "null") {
-		var existingImages = JSON.parse(
-			collectionHolder.dataset.imagesContribution
-		);
-	}
-	var index = parseInt(collectionHolder.dataset.index);
+	var collectionHolder = document.getElementById("medias");
+	var existingMedias = document.querySelectorAll(".card[data-target]");
+	var mediasIndex = parseInt(collectionHolder.dataset.index);
+
 	var removedButtons = [];
 	var requiredsFields = [];
 	var invalidsFields = new Set();
 	// use of a Set object to prevent duplication when there are two inputs for the same card
-	var invalidsImagesCards = new Set();
+	var invalidedCards = new Set();
 	var errorDisplay = false;
 
 	// ---------------------------------------------------------
@@ -29,28 +26,46 @@ window.onload = () => {
 	function removeElements() {
 		removedButtons.forEach((removedButton) => {
 			removedButton.addEventListener("click", function (e) {
-				var id = this.getAttribute("data-remove");
-				var card = document.querySelector("[data-id='" + id + "']");
+				var idRemovedButton = this.getAttribute("data-remove");
+				var typeOfMedia = this.getAttribute("data-type");
+
+				var card = document.querySelector(
+					".card [data-type='" +
+						typeOfMedia +
+						"'][data-id='" +
+						idRemovedButton +
+						"']"
+				);
 				card ? card.remove() : "";
 
-				var modal = document.getElementById("img_" + id + "_Modal");
+				var modal = document.getElementById(
+					typeOfMedia + "_" + idRemovedButton + "_Modal"
+				);
 				modal ? modal.remove() : "";
 
 				removedButtons = removedButtons.filter((item) => item !== this);
 
 				requiredsFields = requiredsFields.filter(
-					(item) => item.dataset.id !== id
+					(item) =>
+						item.dataset.id !== idRemovedButton ||
+						item.dataset.type !== typeOfMedia
 				);
 
 				invalidsFields.forEach((item) => {
-					if (item.dataset.id === id) {
+					if (
+						item.dataset.id === idRemovedButton &&
+						item.dataset.type === typeOfMedia
+					) {
 						invalidsFields.delete(item);
 					}
 				});
 
-				invalidsImagesCards.forEach((item) => {
-					if (item.dataset.id === id) {
-						invalidsImagesCards.delete(item);
+				invalidedCards.forEach((item) => {
+					if (
+						item.dataset.id === idRemovedButton &&
+						item.dataset.type === typeOfMedia
+					) {
+						invalidedCards.delete(item);
 					}
 				});
 			});
@@ -104,47 +119,58 @@ window.onload = () => {
 
 	// ---------------------------------------------------------
 
-	function addImage() {
-		index++;
+	function addMediaCard(typeOfMedia) {
+		let isImage = typeOfMedia === "img" ? true : false;
+		mediasIndex++;
 
-		var prototype = collectionHolder.dataset.prototype;
+		var prototype = isImage
+			? collectionHolder.dataset.imagePrototype
+			: collectionHolder.dataset.videoPrototype;
 
-		// rewriting the prototype
-		prototype = prototype.replace(/__name__/g, index);
-		prototype = prototype.replace(/valueTitle/g, "");
+		// rewriting the Prototype
+		prototype = prototype.replace(/__name__/g, mediasIndex);
+
 		let content = document.createElement("html");
 		content.innerHTML = prototype;
 		let newForm = content.querySelector("div");
 
-		let src = "/src/img/no_image.png";
+		let src = "/src/img/no_" + (isImage ? "image" : "video") + ".svg";
 
 		var fragmentCard = create(
-			"<div class='card d-inline-block m-1' data-id='" +
-				index +
+			"<div class='card d-inline-block m-1' data-type='" +
+				(isImage ? "img" : "video") +
+				"' data-id='" +
+				mediasIndex +
 				"'><div class='card-img-top' style='background: url(" +
 				src +
-				") no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 0'></div><div class='card-body text-end'><button type='button' class='btn btn-primary bi bi-pencil-square' data-bs-toggle='modal' data-bs-target='#img_" +
-				index +
-				"_Modal'></button><button type='button' class='btn btn-danger bi bi-trash-fill ms-4' data-remove='" +
-				index +
+				") no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0'></div><div class='card-body text-end'><button type='button' class='btn btn-primary bi bi-pencil-square' data-bs-toggle='modal' data-bs-target='#" +
+				((isImage ? "img_" : "video_") + mediasIndex) +
+				"_Modal'></button><button type='button' class='btn btn-danger bi bi-trash-fill ms-4' data-type='" +
+				(isImage ? "img" : "video") +
+				"' data-remove='" +
+				mediasIndex +
 				"' ></button></div>"
 		);
-
 		collectionHolder.append(fragmentCard);
 		collectionHolder.append(newForm);
 
-		// updating the counter of images
-		collectionHolder.dataset.index =
-			document.querySelectorAll("[data-id]").length;
+		// updating the counter of medias
+		collectionHolder.dataset.index++;
 
 		var removedButton = document.querySelector(
-			"[data-remove='" + index + "']"
+			"[data-type='" +
+				(isImage ? "img" : "video") +
+				"'][data-remove='" +
+				mediasIndex +
+				"']"
 		);
 		removedButtons.push(removedButton);
 
 		let new_inputs = [
 			...document.querySelectorAll(
-				"[id*='images_" + index + "_'][required='required']"
+				"[id*='" +
+					((isImage ? "images_" : "videos_") + mediasIndex) +
+					"_'][required='required']"
 			),
 		];
 		new_inputs.forEach((input) => {
@@ -162,26 +188,33 @@ window.onload = () => {
 
 	function fieldsColoration() {
 		requiredsFields = [...document.querySelectorAll("[required]")];
+		let errorBadge =
+			"background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e\") no-repeat right 0/15%, ";
 
-		// detect all invalidsImagesCards with errors
+		// detect all invalidedCards with null fields
+		// (when loading the page, it only detects file fields that are reset after each submission and are therefore null).
 		requiredsFields.forEach((field) => {
-			if (field.value === "") {
+			console.log(field, field.validity.patternMismatch);
+			if (field.value === "" || field.validity.patternMismatch) {
 				invalidsFields.add(field);
-				if (field.dataset.field === "image") {
-					invalidsImagesCards.add(
+				console.log("invalid field", field);
+				if (
+					field.dataset.type === "img" ||
+					field.dataset.type === "video"
+				) {
+					invalidedCards.add(
 						document.querySelector(
-							"[data-id='" + field.dataset.id + "']"
+							".card[data-type='" +
+								field.dataset.type +
+								"'][data-id='" +
+								field.dataset.id +
+								"']"
 						)
 					);
 				}
 			}
 		});
-
-		console.log(
-			!document.getElementById("error_message"),
-			[...invalidsFields].length > 0,
-			errorDisplay
-		);
+		console.log(requiredsFields, invalidsFields, invalidedCards);
 		// generate a error message
 		if (
 			errorDisplay === false &&
@@ -196,23 +229,27 @@ window.onload = () => {
 		}
 
 		// modification of the styles to indicate the errors zones
-		invalidsFields.forEach((invalid_input) => {
-			invalid_input.classList.add("is-invalid");
+		invalidsFields.forEach((invalidField) => {
+			invalidField.classList.add("is-invalid");
 		});
-
-		invalidsImagesCards.forEach((card) => {
+		console.log([...existingMedias]);
+		invalidedCards.forEach((card) => {
 			card.classList.add("border", "border-1", "border-danger");
-			if (existingImages && existingImages[card.dataset.id]) {
+			if ([...existingMedias][card.dataset.id]) {
+				console.log("card copy", card);
 				let copyStyleCard =
 					card.firstElementChild.getAttribute("style");
 				copyStyleCard = copyStyleCard.replace(
 					"background: ",
-					"background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e\") no-repeat right 0/15%, "
+					errorBadge
 				);
 				card.firstElementChild.setAttribute("style", copyStyleCard);
 			} else {
+				console.log("card 2 copy", card);
 				card.firstElementChild.removeAttribute("style");
-				card.firstElementChild.classList.add("card-img-invalid");
+				card.firstElementChild.classList.add(
+					"card-" + card.dataset.type + "-invalid"
+				);
 			}
 		});
 
@@ -222,25 +259,26 @@ window.onload = () => {
 				if (e.target.value.length >= 1) {
 					e.target.classList.remove("is-invalid");
 					invalidsFields.delete(e.target);
-
+					console.log("remove field", e.target);
 					if (
 						[...invalidsFields].filter(
 							(item) => item.dataset.id === e.target.dataset.id
 						).length < 1
 					) {
-						let card = [...invalidsImagesCards].filter(
+						let card = [...invalidedCards].filter(
 							(item) => item.dataset.id === e.target.dataset.id
 						)[0];
+						console.log("card remove", card);
 						card.classList.remove(
 							"border",
 							"border-1",
 							"border-danger"
 						);
-						if (existingImages && existingImages[card.dataset.id]) {
+						if ([...existingMedias][card.dataset.id]) {
 							let copyStyleCard =
 								card.firstElementChild.getAttribute("style");
 							copyStyleCard = copyStyleCard.replace(
-								"background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e\") no-repeat right 0/15%, ",
+								errorBadge,
 								"background: "
 							);
 							card.firstElementChild.setAttribute(
@@ -250,14 +288,17 @@ window.onload = () => {
 						} else {
 							card.firstElementChild.setAttribute(
 								"style",
-								"background: url(/src/img/no_image.png) no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 0"
+								"background: url(/src/img/no_" +
+									card.dataset.type +
+									".svg) no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0"
 							);
 							card.firstElementChild.classList.remove(
-								"card-img-invalid"
+								"card-img-invalid",
+								"card-video-invalid"
 							);
 						}
-						invalidsImagesCards = new Set(
-							[...invalidsImagesCards].filter(
+						invalidedCards = new Set(
+							[...invalidedCards].filter(
 								(item) =>
 									item.dataset.id !== e.target.dataset.id
 							)
@@ -271,8 +312,10 @@ window.onload = () => {
 	}
 
 	// -------------------------------------------------------------
+	// -------------------------------------------------------------
+	// INIT INIT INIT INIT INIT INIT INIT INIT INIT INIT INIT INIT
 
-	if (existingImages) {
+	if (existingMedias) {
 		// removal of the unnecessary path field on existing images
 		let formPath = document.getElementsByClassName("form_path");
 		while (formPath[0]) {
@@ -292,10 +335,12 @@ window.onload = () => {
 
 	// -------------------------------------------------------------
 
-	// management of card adding
-	var addCardLink = document.querySelector("[data-add-card]");
-	addCardLink.addEventListener("click", (e) => {
-		addImage();
+	// management of image card adding
+	var addMediaCardButtons = document.querySelectorAll("[data-add-card]");
+	addMediaCardButtons.forEach((button) => {
+		button.addEventListener("click", (e) => {
+			addMediaCard(button.dataset.type);
+		});
 	});
 
 	// delete management
