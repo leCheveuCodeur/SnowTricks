@@ -33,7 +33,9 @@ class ContributionController extends AbstractController
             foreach ($trick->getImages() as $image) {
                 $imageCopy = new Image;
                 $imageCopy->setImageTarget($image->getId())
+                    ->setInFront($image->getInFront())
                     ->setTitle($image->getTitle())
+                    ->setOriginalFileName($image->getOriginalFileName())
                     ->setFileName($image->getFileName());
                 $contribution->addImage($imageCopy);
             }
@@ -50,76 +52,106 @@ class ContributionController extends AbstractController
         // End of init
         //--------------------------------------------------------------------------------------------------------------------------------
 
-        // Remove from the request the image previously deleted but kept in memory by Symfony
+        // Remove from the request the media previously deleted but kept in memory by Symfony
         // and reindexing the request
         if ($request->request->get('contribution')) {
             $contributionRequestCopy = $request->request->all('contribution');
             $contributionFilesCopy = $request->files->all('contribution');
 
-            $imagesInTheRequest = (array)$contributionRequestCopy['images'];
-            $videosInTheRequest = (array)$contributionRequestCopy['videos'];
+            $imagesInTheRequest = \key_exists('images', $contributionRequestCopy) ? (array)$contributionRequestCopy['images'] : \false;
+            $videosInTheRequest = \key_exists('videos', $contributionFilesCopy) ? (array)$contributionRequestCopy['videos'] : \false;
             if ($contributionFilesCopy) {
                 $filesInTheRequest = (array)$contributionFilesCopy['images'];
             }
 
-            $oldKey = -1;
-            $index = 0;
-            $reindexedImages = [];
-            $reindexedFiles = [];
-            foreach ($imagesInTheRequest as $key => $image) {
-                if ($key > $oldKey) {
-                    $reindexedImages[] = $image;
-                    if ($contributionFilesCopy && key_exists($key, $filesInTheRequest)) {
-                        $reindexedFiles[$index] = $filesInTheRequest[$key];
+            if ($imagesInTheRequest) {
+                $oldKey = -1;
+                $index = 0;
+                $reindexedImages = [];
+                $reindexedFiles = [];
+                foreach ($imagesInTheRequest as $key => $image) {
+                    if ($key > $oldKey) {
+                        $reindexedImages[] = $image;
+                        \dump($image);
+                        if ($contributionFilesCopy && key_exists($key, $filesInTheRequest)) {
+                            $reindexedFiles[$index] = $filesInTheRequest[$key];
+                        }
+                    } else {
+                        break;
                     }
+
+                    $oldKey = $key;
+                    $index++;
                 }
 
-                $oldKey = $key;
-                $index++;
+                $contributionRequestCopy['images'] = $reindexedImages;
+                $contributionFilesCopy['images'] = $reindexedFiles;
+                // Overwrite the existing request with our copy
+                $request->files->set('contribution', $contributionFilesCopy);
             }
 
-            $oldKey = -1;
-            $index = 0;
-            $reindexedVideos = [];
-            foreach ($videosInTheRequest as $key => $video) {
-                if ($key > $oldKey) {
-                    $reindexedVideos[] = $video;
+            if ($videosInTheRequest) {
+                $oldKey = -1;
+                $index = 0;
+                $reindexedVideos = [];
+                foreach ($videosInTheRequest as $key => $video) {
+                    if ($key > $oldKey) {
+                        $reindexedVideos[] = $video;
+                    } else {
+                        break;
+                    }
+
+                    $oldKey = $key;
+                    $index++;
                 }
 
-                $oldKey = $key;
-                $index++;
+                $contributionRequestCopy['videos'] = $reindexedVideos;
             }
 
-            $contributionRequestCopy['images'] = $reindexedImages;
-            $contributionRequestCopy['videos'] = $reindexedVideos;
-            $contributionFilesCopy['images'] = $reindexedFiles;
-            // Overwrite the existing request with our copy
-            $request->request->set('contribution', $contributionRequestCopy);
-            $request->files->set('contribution', $contributionFilesCopy);
+            if ($imagesInTheRequest || $videosInTheRequest) {
+                // Overwrite the existing request with our copy
+                $request->request->set('contribution', $contributionRequestCopy);
+            }
         }
 
         // End of reindexing the request
         //--------------------------------------------------------------------------------------------------------------------------------
 
         $formView = $this->createForm(ContributionType::class, $contribution);
+        \dump($request);
         $formView->handleRequest($request);
+        if ($formView->isSubmitted()) {
+            \dump($request);
+        }
 
+        \dump($formView, $contribution, $request);
         if ($formView->isSubmitted() && $formView->isValid()) {
 
-            \dd($formView, $contribution, $request);
+            if ($formView->get('image_in_front')) {
+                $newImageInFront = $formView->get('image_in_front')->getData();
+            }
 
             /** @var Form */
             $imagesForm = $formView->get('images');
 
-            foreach ($request->files->get('contribution')['images'] as $key => $upload) {
+            foreach ($imagesForm as $key => $imageForm) {
+                /** @var Image */
+                $image = $imageForm->getData();
                 /** @var UploadedFile */
-                $file = $upload['file_name'];
-                if ($file) {
-                    $fileName = $fileUploaderHelper->upload($file);
+                $hasFile = $request->files->get('contribution')['images'][$key]['file_name'] ?? false;
 
-                    /** @var Image */
-                    $image = $imagesForm->get($key)->getData();
+                \dd($newImageInFront, $contribution, $request);
+                if ($hasFile) {
+                    $fileName = $fileUploaderHelper->upload($hasFile);
                     $image->setFileName($fileName);
+                }
+
+                if ($newImageInFront) {
+                    if ($newImageInFront === $image->getOriginalFileName()) {
+                        $image->setInFront(1);
+                    } else {
+                        $image->setInFront(\null);
+                    }
                 }
             }
 

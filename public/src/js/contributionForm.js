@@ -19,6 +19,7 @@ window.onload = () => {
 	var invalidsFields = new Set();
 	// use of a Set object to prevent duplication when there are two inputs for the same card
 	var invalidedCards = new Set();
+	var fileFields = new Set();
 	var errorDisplay = false;
 
 	// ---------------------------------------------------------
@@ -68,6 +69,14 @@ window.onload = () => {
 						invalidedCards.delete(item);
 					}
 				});
+
+				if (typeOfMedia === "img") {
+					document
+						.querySelector(
+							"OPTION[data-id='" + idRemovedButton + "']"
+						)
+						.remove();
+				}
 			});
 		});
 	}
@@ -119,6 +128,41 @@ window.onload = () => {
 
 	// ---------------------------------------------------------
 
+	function updateListOfImagesInFront() {
+		let selectImageInFront = document.getElementById(
+			"contribution_image_in_front"
+		);
+		console.log(selectImageInFront, requiredsFields);
+		requiredsFields.forEach((requiredField) => {
+			if (
+				requiredField.hasAttribute("type") &&
+				requiredField.getAttribute("type") === "file" &&
+				fileFields.has(requiredField) === false
+			) {
+				fileFields.add(requiredField);
+				console.log(requiredField, fileFields);
+				requiredField.addEventListener("change", (e) => {
+					let fileName = e.target.files[0].name;
+
+					let optionSelect =
+						"<option value='" +
+						fileName +
+						"' data-id='" +
+						mediasIndex +
+						"'>" +
+						fileName +
+						"</option>";
+					selectImageInFront.insertAdjacentHTML(
+						"beforeend",
+						optionSelect
+					);
+				});
+			}
+		});
+	}
+
+	// ---------------------------------------------------------
+
 	function addMediaCard(typeOfMedia) {
 		let isImage = typeOfMedia === "img" ? true : false;
 		mediasIndex++;
@@ -134,7 +178,7 @@ window.onload = () => {
 		content.innerHTML = prototype;
 		let newForm = content.querySelector("div");
 
-		let src = "/src/img/no_" + (isImage ? "image" : "video") + ".svg";
+		let src = "/src/img/no_" + (isImage ? "img" : "video") + ".svg";
 
 		var fragmentCard = create(
 			"<div class='card d-inline-block m-1' data-type='" +
@@ -182,10 +226,11 @@ window.onload = () => {
 
 		// manages the display of the remaining character count
 		displayingRemainingsCharacters();
+
+		updateListOfImagesInFront();
 	}
 
 	// ---------------------------------------------------------
-
 	function fieldsColoration() {
 		requiredsFields = [...document.querySelectorAll("[required]")];
 		let errorBadge =
@@ -194,7 +239,6 @@ window.onload = () => {
 		// detect all invalidedCards with null fields
 		// (when loading the page, it only detects file fields that are reset after each submission and are therefore null).
 		requiredsFields.forEach((field) => {
-			console.log(field, field.validity.patternMismatch);
 			if (field.value === "" || field.validity.patternMismatch) {
 				invalidsFields.add(field);
 				console.log("invalid field", field);
@@ -214,7 +258,7 @@ window.onload = () => {
 				}
 			}
 		});
-		console.log(requiredsFields, invalidsFields, invalidedCards);
+
 		// generate a error message
 		if (
 			errorDisplay === false &&
@@ -232,7 +276,6 @@ window.onload = () => {
 		invalidsFields.forEach((invalidField) => {
 			invalidField.classList.add("is-invalid");
 		});
-		console.log([...existingMedias]);
 		invalidedCards.forEach((card) => {
 			card.classList.add("border", "border-1", "border-danger");
 			if ([...existingMedias][card.dataset.id]) {
@@ -349,8 +392,11 @@ window.onload = () => {
 	// manages the display of the remaining character count
 	displayingRemainingsCharacters();
 
-	fieldsColoration();
+	updateListOfImagesInFront();
 
+	if (document.querySelector("[data-new-trick='1']") === false) {
+		fieldsColoration();
+	}
 	//---------------------------------------------------------------------------
 
 	// SUBMIT - detects unfilled required fields
