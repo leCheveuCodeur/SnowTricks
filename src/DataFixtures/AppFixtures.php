@@ -52,7 +52,7 @@ class AppFixtures extends Fixture
             [
                 "admin@gmail.com", "Frontside 720", $categories[1], "une rotation de 2 tours en frontside", "",
                 ["colin-lloyd-CVB44XCYyHA-unsplash-6106326bf0da6.jpg", "colin-lloyd-pzZmPqPdAIE-unsplash-6106326bf271c.jpg"],
-                ["https://www.youtube.com/embed/1vtZXU15e38","https://youtu.be/H2MKP1epC7k"]
+                ["https://www.youtube.com/embed/1vtZXU15e38", "https://youtu.be/H2MKP1epC7k"]
             ],
             [
                 "admin@gmail.com", "Frontside 540",  $categories[1], "saut où l’on fait un tour et demi en l’air", "",
@@ -173,6 +173,7 @@ class AppFixtures extends Fixture
             foreach ($trick_data[5] as $trick_img) {
                 $img = new Image;
                 $img->setFileName($trick_img)
+                    ->setOriginalFileName($trick_img)
                     ->setTitle($this->slugger->slug(\preg_replace("/\.\w+$/", '', $trick_img), ' ', 'fr_Fr'))
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
 

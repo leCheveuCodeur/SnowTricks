@@ -30,6 +30,12 @@ class Image
      * @ORM\Column(type="string", length=255)
      * @Groups("trick:read")
      */
+    private $originalFileName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups("trick:read")
+     */
     private $file_name;
 
     /**
@@ -52,6 +58,7 @@ class Image
      * @Groups("trick:read")
      */
     private $imageTarget;
+
 
     public function getId(): ?int
     {
@@ -126,6 +133,18 @@ class Image
     public function setFileName(string $file_name): self
     {
         $this->file_name = $file_name;
+
+        return $this;
+    }
+
+    public function getOriginalFileName(): ?string
+    {
+        return $this->originalFileName;
+    }
+
+    public function setOriginalFileName(string $originalFileName): self
+    {
+        $this->originalFileName = $originalFileName;
 
         return $this;
     }

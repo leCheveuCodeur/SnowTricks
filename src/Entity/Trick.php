@@ -204,7 +204,9 @@ class Trick
 
     public function getImageInFront()
     {
-        return $this->images->matching(TrickRepository::createImgInFrontCriteria());
+        /** @var Image */
+        $image = $this->images->matching(TrickRepository::createImgInFrontCriteria())[0];
+        return $image;
     }
 
     public function addImage(Image $image): self
