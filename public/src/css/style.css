@@ -12280,6 +12280,9 @@ footer {
   display: grid;
   -ms-grid-columns: (minmax(auto, 300px))[auto-fit];
       grid-template-columns: repeat(auto-fit, minmax(auto, 300px));
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 /* CARD TRICK */
@@ -12308,6 +12311,17 @@ footer {
   border-radius: 10px 10px 0 0;
 }
 
+.card-medias_btn {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 410px;
+  margin: 1rem auto;
+}
+
 .card-img-invalid {
   background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e") no-repeat right 0/15%, url(/src/img/no_img.svg) no-repeat center/50% #f8fafb;
   height: 30vh;
@@ -12318,6 +12332,16 @@ footer {
   background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e") no-repeat right 0/15%, url(/src/img/no_video.svg) no-repeat center/50% #f8fafb;
   height: 30vh;
   border-radius: 10px 10px 0 0;
+}
+
+@media (min-width: 768px) {
+  #btn-viewMedias,
+  #btn-hideMedias {
+    display: none;
+  }
+  #collapseMediasCards {
+    display: block;
+  }
 }
 
 /* FORM TRICK */
@@ -12332,6 +12356,10 @@ footer {
   top: -6px;
   left: calc(50% - 40px);
   width: 80px;
+}
+
+fieldset {
+  display: none;
 }
 
 /* NAVBAR */
