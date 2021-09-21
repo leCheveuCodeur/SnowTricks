@@ -1,0 +1,4 @@
+{% for message in app.flashes('success') %}
+	<div class="alert alert-success mx-auto"><i class="bi bi-check-lg"> </i>{{ message }}
+	</div>
+{% endfor %}

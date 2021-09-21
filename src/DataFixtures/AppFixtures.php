@@ -148,6 +148,7 @@ class AppFixtures extends Fixture
                 ->setCategory($category)
                 ->setLeadIn($lead_in)
                 ->setContent($content)
+                ->setCreationDate($faker->dateTime('-6 months'))
                 ->addUser($this->userRepository->findOneBy(['email' => $trick_data[0]]));
 
             $manager->persist($trick);
