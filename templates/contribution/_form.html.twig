@@ -21,223 +21,239 @@
 {% endmacro %}
 
 {% macro printImageAvailable(imageForm, index) %}
-	<div class="card d-inline-block m-1 {{imageForm.vars.valid is same as(false) ? 'border border-1 border-danger' : ''}}" data-type="img" data-id="{{index}}">
+	<div class="card m-1{{imageForm.vars.valid is same as(false) ? ' border border-1 border-danger' : ''}}" data-type="img" data-id="{{index}}">
 		{% if imageForm.imageTarget.vars.data is null %}
-			<div class="card-img-top" style="background: {{imageForm.vars.valid is same as(false) ? " url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e&quot;) no-repeat right 0/15%, " : ''}} url('/src/img/no_img.svg') no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0"></div>
-		{% else %}
-			<div class="card-img-top" style="background: {{imageForm.vars.valid is same as(false) ? " url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e&quot;) no-repeat right 0/15%, " : ''}} url(' {{'/img_uploads/'~ imageForm.vars.data.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 0"></div>
-		{% endif %}
-
-		<div class="card-body text-end">
-			<button type="button" class="btn btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#img_{{index}}_Modal"></button>
-			<button type="button" class="btn btn-danger bi bi-trash-fill ms-4" data-type="img" data-remove="{{index}}"></button>
-		</div>
-	</div>
-
-	<div class="modal fade" id="img_{{index}}_Modal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="imgModalLabel">Ajout d'une image</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					{{ form_errors(imageForm) }}
-					{{ form_row(imageForm.title, {'value': imageForm.vars.data.title|default, 'attr': {'data-id': index, 'data-type':'img'}})}}
-
-					{% if imageForm.imageTarget.vars.value %}
-						<div>
-							<span class="badge bg-success">
-								<i class="bi bi-file-image"></i>
-								{{ imageForm.vars.data.fileName|preg_replace('/-\\w+(?=\\.\\w+$)/', '') }}
-							</span>
-						</div>
-						{% if imageForm.file_name is defined %}
-							{{ form_row(imageForm.file_name, {'row_attr':{'class': 'form_path'}})}}
-						{% endif %}
-					{% else %}
-						{{ form_row(imageForm.file_name, {'value': imageForm.vars.data.fileName, 'attr': {'data-id': index, 'data-type':'img'}})}}
-					{% endif %}
-
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-				</div>
+			<div class="card-img-top" style="background: {{imageForm.vars.valid is same as(false) ? " url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e&quot;) no-repeat right 0/15%, " : ''}} url('/src/img/no_img.svg') no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0">
+			{% else %}
+				<div class="card-img-top" style="background: {{imageForm.vars.valid is same as(false) ? " url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e&quot;) no-repeat right 0/15%, " : ''}} url(' {{'/img_uploads/'~ imageForm.vars.data.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 0">
+				{% endif %}
+			</div>
+			<div class="card-body text-end">
+				<button type="button" class="btn btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#img_{{index}}_Modal"></button>
+				<button type="button" class="btn btn-danger bi bi-trash-fill ms-4" data-type="img" data-remove="{{index}}"></button>
 			</div>
 		</div>
-	</div>
-{% endmacro %}
 
-{% macro printVideoRow(videoForm) %}
-	<div class="modal fade" id="video___name___Modal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="videoModalLabel">Ajout d'une video</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					{{ form_errors(videoForm) }}
-					{{ form_row(videoForm.title, {'attr': {'data-id': '__name__', 'data-type':'video'}})}}
-					{{ form_row(videoForm.link, {'attr': {'data-id': '__name__', 'data-type':'video'}})}}
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-				</div>
-			</div>
-		</div>
-	</div>
-{% endmacro %}
-
-{% macro printVideoAvailable(videoForm, index) %}
-	<div class="card d-inline-block m-1{{videoForm.vars.valid is same as(false) ? 'border border-1 border-danger' : ''}}" data-type="video" data-id="{{index}}">
-		{% if videoForm.videoTarget.vars.data is null %}
-			<div class="card-img-top" style="background: {{videoForm.vars.valid is same as(false) ? " url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e&quot;) no-repeat right 0/15%, " : ''}} url('/src/img/no_video.svg') no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0"></div>
-		{% else %}
-			<iframe class="card-img-top" src="{{videoForm.vars.data.link}}" title="Video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-		{% endif %}
-		<div class="card-body text-end">
-			<button type="button" class="btn btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#video_{{index}}_Modal"></button>
-			<button type="button" class="btn btn-danger bi bi-trash-fill ms-4" data-type="video" data-remove="{{index}}"></button>
-		</div>
-	</div>
-
-	<div class="modal fade" id="video_{{index}}_Modal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="videoModalLabel">Ajout d'une image</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					{{ form_errors(videoForm) }}
-					{{ form_row(videoForm.title, {'value': videoForm.vars.data.title|default, 'attr': {'data-id': index, 'data-type':'video'}})}}
-
-					{% if videoForm.videoTarget.vars.value %}
-						<div>
-							<span class="badge bg-success">
-								<i class="bi bi-file-play"></i>
-								{{ videoForm.vars.data.link}}
-							</span>
-						</div>
-						{% if videoForm.link is defined %}
-							{{ form_row(videoForm.link)}}
-						{% endif %}
-					{% else %}
-						{{ form_row(videoForm.link, {'value': videoForm.vars.data.link, 'attr': {'data-id': index, 'data-type':'video'}})}}
-					{% endif %}
-
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-				</div>
-			</div>
-		</div>
-	</div>
-{% endmacro %}
-
-{# ------------------------------------------------------------------------------------------ #}
-
-<div class="card" data-new-trick={{trick ? '' : 1}}>
-
-	{{ form_start(formView) }}
-
-	{{ form_errors(formView) }}
-
-	<div class="row">
-		<div class="col">
-			<div class="card-trick_in-front">
-				<button type="button" class="btn btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#img_in_front_Modal"></button>
-				{# ---------- Modal ------------ #}
-				<div class="modal fade" id="img_in_front_Modal" tabindex="-1" aria-labelledby="image in front - modal" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="videoModalLabel">Image mise en avant</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								{{ form_row(formView.image_in_front, {'attr': {'data-type':'trick'}})}}
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-							</div>
-						</div>
+		<div class="modal fade" id="img_{{index}}_Modal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="imgModalLabel">Ajout d'une image</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-				</div>
-			</div>
-			{# ---------- Modal ------------ #}
-			{% if not trick or not trick.imageInFront %}
-				<div class="d-flex justify-content-center align-items-center" style="background: url('/src/img/no_img.svg') no-repeat center/50%; height: 40vh; border-radius: 10px 10px 0 0">
-				{% else %}
-					<div class="d-flex justify-content-center align-items-center" style="background: url({{ asset('/img_uploads/'~ trick.imageInFront.fileName)}}) no-repeat center; background-size: cover; height: 40vh; border-radius: 10px 10px 0 0">
-					{% endif %}
+					<div class="modal-body">
+						{{ form_errors(imageForm) }}
+						{{ form_row(imageForm.title, {'value': imageForm.vars.data.title|default, 'attr': {'data-id': index, 'data-type':'img'}})}}
 
-					<div class="w-100 px-lg-5 px-1">
-						{% if trick %}
-							<h2 class="card-trick_title text-center">
-								{{ trick.title }}
-							</h2>
+						{% if imageForm.imageTarget.vars.value %}
+							<div>
+								<span class="badge bg-success">
+									<i class="bi bi-file-image"></i>
+									{{ imageForm.vars.data.fileName|preg_replace('/-\\w+(?=\\.\\w+$)/', '') }}
+								</span>
+							</div>
+							{% if imageForm.file_name is defined %}
+								{{ form_row(imageForm.file_name, {'row_attr':{'class': 'form_path'}})}}
+							{% endif %}
 						{% else %}
-							{{ form_row(formView.title, {'attr': {'data-type':'trick'}}) }}
+							{{ form_row(imageForm.file_name, {'value': imageForm.vars.data.fileName, 'attr': {'data-id': index, 'data-type':'img'}})}}
 						{% endif %}
+
 					</div>
-				</div>
-
-				<div class="images_section py-2">
-
-					<button type="button" class="btn btn-success bi bi-plus-lg text-uppercase" data-add-card data-type="img">
-						Ajouter une image</button>
-
-					<button type="button" class="btn btn-success bi bi-plus-lg text-uppercase" data-add-card data-type="video">
-						Ajouter une video</button>
-
-					<div id="medias" data-index="{{(formView.images|length)+(formView.videos|length) - 1}}" class="media-list" data-image-prototype=" {{macros.printImageRow(formView.images.vars.prototype)|e('html_attr')}} " data-video-prototype=" {{macros.printVideoRow(formView.videos.vars.prototype)|e('html_attr')}} ">
-
-						{% set index = 0 %}
-
-						{% for imageForm in formView.images %}
-							{{ macros.printImageAvailable(imageForm,index) }}
-							{% set index = index + 1 %}
-						{% endfor %}
-
-						{% for videoForm in formView.videos %}
-							{{ macros.printVideoAvailable(videoForm,index) }}
-							{% set index = index + 1 %}
-						{% endfor %}
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
 					</div>
 				</div>
 			</div>
-			{{ form_row(formView.lead_in, {'attr': {'data-type':'trick'}}) }}
-			{{ form_row(formView.content, {'attr': {'data-type':'trick'}})}}
-			{% if not trick %}
-				{{ form_row(formView.category, {'attr': {'data-type':'trick'}})}}
-			{% endif %}
 		</div>
+	{% endmacro %}
 
-		<div id="form_error">
-			{% if formView.vars.valid is same as(false) %}
-
-				<div class="alert alert-danger d-flex align-items-center" id='error_message'>
-					<i class="bi bi-exclamation-triangle-fill"></i>
-					<div>&nbsp;<strong>Mince alors !</strong>
-						<span class="alert-link">Changez quelques trucs</span>
-						et essayez de soumettre à nouveau.</div>
+	{% macro printVideoRow(videoForm) %}
+		<div class="modal fade" id="video___name___Modal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="videoModalLabel">Ajout d'une video</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						{{ form_errors(videoForm) }}
+						{{ form_row(videoForm.title, {'attr': {'data-id': '__name__', 'data-type':'video'}})}}
+						{{ form_row(videoForm.link, {'attr': {'data-id': '__name__', 'data-type':'video'}})}}
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+					</div>
 				</div>
+			</div>
+		</div>
+	{% endmacro %}
 
+	{% macro printVideoAvailable(videoForm, index) %}
+		<div class="card m-1{{videoForm.vars.valid is same as(false) ? ' border border-1 border-danger' : ''}}" data-type="video" data-id="{{index}}">
+			{% if videoForm.videoTarget.vars.data is null %}
+				<div class="card-img-top" style="background: {{videoForm.vars.valid is same as(false) ? " url(&quot;data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23da292e'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23da292e' stroke='none'/%3e%3c/svg%3e&quot;) no-repeat right 0/15%, " : ''}} url('/src/img/no_video.svg') no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0"></div>
+			{% else %}
+				<iframe class="card-img-top" src="{{videoForm.vars.data.link}}" title="Video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 			{% endif %}
-
+			<div class="card-body text-end">
+				<button type="button" class="btn btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#video_{{index}}_Modal"></button>
+				<button type="button" class="btn btn-danger bi bi-trash-fill ms-4" data-type="video" data-remove="{{index}}"></button>
+			</div>
 		</div>
 
-		<button type="submit" class="submit btn btn-primary text-uppercase">
-			<i class="fas fa-save"></i>
-			Soumettre !
-		</button>
+		<div class="modal fade" id="video_{{index}}_Modal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="videoModalLabel">Ajout d'une image</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						{{ form_errors(videoForm) }}
+						{{ form_row(videoForm.title, {'value': videoForm.vars.data.title|default, 'attr': {'data-id': index, 'data-type':'video'}})}}
 
-		{{ form_end(formView) }}
+						{% if videoForm.videoTarget.vars.value %}
+							<div>
+								<span class="badge bg-success">
+									<i class="bi bi-file-play"></i>
+									{{ videoForm.vars.data.link}}
+								</span>
+							</div>
+							{% if videoForm.link is defined %}
+								{{ form_row(videoForm.link)}}
+							{% endif %}
+						{% else %}
+							{{ form_row(videoForm.link, {'value': videoForm.vars.data.link, 'attr': {'data-id': index, 'data-type':'video'}})}}
+						{% endif %}
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endmacro %}
+
+	{# ------------------------------------------------------------------------------------------ #}
+
+	<div class="card mb-4" data-new-trick={{trick ? '' : 1}}>
+
+		{{ form_start(formView, {'attr': {'class': 'd-flex flex-column'}})}}
+
+		{{ form_errors(formView) }}
+
+		<div class="row">
+			<div class="col">
+				<div class="card-trick_in-front">
+					<button type="button" class="btn btn-primary bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#img_in_front_Modal"></button>
+					{# ---------- Modal ------------ #}
+					<div class="modal fade" id="img_in_front_Modal" tabindex="-1" aria-labelledby="image in front - modal" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="videoModalLabel">Image mise en avant</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									{{ form_row(formView.image_in_front, {'attr': {'data-type':'trick'}})}}
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{# ---------- Modal ------------ #}
+				{% if not trick or not trick.imageInFront %}
+					<div class="d-flex justify-content-center align-items-center" style="background: url('/src/img/no_img.svg') no-repeat center/50%; height: 40vh; border-radius: 10px 10px 0 0">
+					{% else %}
+						<div class="d-flex justify-content-center align-items-center" style="background: url({{ asset('/img_uploads/'~ trick.imageInFront.fileName)}}) no-repeat center; background-size: cover; height: 40vh; border-radius: 10px 10px 0 0">
+						{% endif %}
+
+						<div class="w-100 px-lg-5 px-1">
+							{% if trick %}
+								<h2 class="card-trick_title text-center">
+									{{ trick.title }}
+								</h2>
+							{% else %}
+								{{ form_row(formView.title, {'attr': {'data-type':'trick'},'row_attr':{'class': 'mb-3 px-2'}}) }}
+							{% endif %}
+						</div>
+					</div>
+
+					<h2 class="text-center fs-1">- Medias -</h2>
+					<div class="d-flex justify-content-center m-1">
+						<button id="btn-viewMedias" class="btn btn-primary bi bi-collection text-uppercase m-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMediasCards" aria-expanded="true" aria-controls="collapseMediasCards">
+							Afficher/Cacher les médias
+						</button>
+					</div>
+
+					<div class="card-medias py-2 collapse" id="collapseMediasCards">
+						<div id="medias" data-index="{{(formView.images|length)+(formView.videos|length) - 1}}" class="media-list" data-image-prototype=" {{macros.printImageRow(formView.images.vars.prototype)|e('html_attr')}} " data-video-prototype=" {{macros.printVideoRow(formView.videos.vars.prototype)|e('html_attr')}} ">
+
+							{% set index = 0 %}
+
+							{% for imageForm in formView.images %}
+								{{ macros.printImageAvailable(imageForm,index) }}
+								{% set index = index + 1 %}
+							{% endfor %}
+
+							{% for videoForm in formView.videos %}
+								{{ macros.printVideoAvailable(videoForm,index) }}
+								{% set index = index + 1 %}
+							{% endfor %}
+						</div>
+						<div class='card-medias_btn'>
+							<button type="button" class="btn btn-success bi bi-plus-lg text-uppercase m-1" data-add-card data-type="img">
+								Ajouter une image</button>
+
+							<button type="button" class="btn btn-success bi bi-plus-lg text-uppercase m-1" data-add-card data-type="video">
+								Ajouter une video</button>
+						</div>
+
+						<div class="d-flex justify-content-center m-1">
+							<button id="btn-hideMedias" class="btn btn-primary bi bi-collection text-uppercase m-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMediasCards" aria-expanded="false" aria-controls="collapseMediasCards">
+								Cacher les médias
+							</button>
+						</div>
+					</div>
+				</div>
+				<h2 class="text-center fs-1">- Description -</h2>
+				<div class="card-description">
+					{{ form_row(formView.lead_in, {'attr': {'data-type':'trick'},'row_attr':{'class': 'mb-3 px-lg-4'}}) }}
+					{{ form_row(formView.content, {'attr': {'data-type':'trick'},'row_attr':{'class': 'mb-3 px-lg-4'}})}}
+				</div>
+				{% if not trick %}
+					{{ form_row(formView.category, {'attr': {'data-type':'trick'},'row_attr':{'class': 'mb-3 px-4'}})}}
+				{% endif %}
+			</div>
+
+			<div id="form_error">
+				{% if formView.vars.valid is same as(false) %}
+
+					<div class="alert alert-danger d-flex align-items-center" id='error_message'>
+						<i class="bi bi-exclamation-triangle-fill"></i>
+						<div>&nbsp;<strong>Mince alors !</strong>
+							<span class="alert-link">Changez quelques trucs</span>
+							et essayez de soumettre à nouveau.</div>
+					</div>
+
+				{% endif %}
+
+			</div>
+
+			<button type="submit" class="submit btn btn-primary text-uppercase  me-3 ms-auto m-3">
+				<i class="fas fa-save"></i>
+				Soumettre !
+			</button>
+
+			{{ form_end(formView) }}
+		</div>
+
+		{% block script %}
+			<script src="{{ asset('src/js/contributionForm.js') }}"></script>
+		{% endblock %}
 	</div>
-
-	{% block script %}
-		<script src="{{ asset('src/js/contributionForm.js') }}"></script>
-	{% endblock %}
-</div>

@@ -1,0 +1,121 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Contribuer
+{% endblock %}
+
+{% block body %}
+
+	<div class="card mb-4">
+
+		<div class="row">
+			<div class="col">
+				{% if not trick.imageInFront %}
+					<div class="d-flex justify-content-center align-items-center" style="background: url('/src/img/no_img.svg') no-repeat center/50%; height: 40vh; border-radius: 10px 10px 0 0">
+					{% else %}
+						<div class="d-flex justify-content-center align-items-center" style="background: url({{ asset('/img_uploads/'~ trick.imageInFront.fileName)}}) no-repeat center; background-size: cover; height: 40vh; border-radius: 10px 10px 0 0">
+						{% endif %}
+
+						<div class="card-title px-lg-5 px-1">
+							<h1 class="card-trick_title text-center">
+								{{ trick.title }}
+							</h1>
+						</div>
+					</div>
+
+					<h2 class="text-center fs-1">- Les Medias -</h2>
+					<div class="d-flex justify-content-center m-1">
+						<button id="btn-viewMedias" class="btn btn-primary bi bi-collection text-uppercase m-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMediasCards" aria-expanded="true" aria-controls="collapseMediasCards">
+							Afficher/Cacher les médias
+						</button>
+					</div>
+
+
+					<div class="card-medias py-2 collapse" id="collapseMediasCards">
+						<div id="medias" class="media-list">
+							{% for image in trick.images %}
+								<div class="card m-1">
+									<div class="card-img-top" style="background: url(' {{'/img_uploads/'~ image.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 10px"></div>
+								</div>
+							{% endfor %}
+							{% for video in trick.videos %}
+								<div class="card m-1">
+									<iframe class="card-img-top" src="{{video.link}}" title="Video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
+							{% endfor %}
+						</div>
+
+						<div class="d-flex justify-content-center m-1">
+							<button id="btn-hideMedias" class="btn btn-primary bi bi-collection text-uppercase m-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMediasCards" aria-expanded="false" aria-controls="collapseMediasCards">
+								Cacher les médias
+							</button>
+						</div>
+					</div>
+
+					<h2 class="text-center fs-1">- La Description -</h2>
+					<div class="card-description mb-5">
+						<p class="card-lead lead fst-italic text-center fs-3 my-5">{{ trick.leadIn }}</p>
+						<p class="text-center">{{ trick.content }}</p>
+						<div class="m-auto text-center">
+							<span class="badge bg-dark">
+								<i class="bi bi-tag me-1"></i>
+								{{ trick.category.name }}
+							</span>
+							<span class="badge bg-dark">
+								<i class="bi bi-calendar-date me-1"></i>
+							</i>
+							{{ (trick.modifiedDate ? trick.modifiedDate : trick.creationDate)|date("d/m/Y")}}
+						</span>
+						{% for user in trick.users %}
+							<span class="badge bg-warning text-dark">
+								<i class="bi bi-pen me-1"></i>
+								{{ user.pseudo }}
+							</span>
+						{% endfor %}
+					</div>
+				</div>
+
+				<h2 class="text-center fs-1">- Vas-y Commentes ! -</h2>
+				{{ form_start(formViewComment, {'attr': {'class': 'trick-post_comment'}}) }}
+				{{ form_errors(formViewComment) }}
+
+				{{ form_row(formViewComment.content) }}
+
+				<button type="submit" class="submit btn btn-warning text-uppercase text-dark fw-bold h1 fs-4 mb-3">
+					Commenter !
+				</button>
+
+				{{ form_end(formViewComment) }}
+			</div>
+
+			<h2 class="text-center fs-1">- Les Commentaires -</h2>
+			<div class="card-comments mx-auto p-3 rounded-3">
+				{% if trick.comments|length == 0  %}
+					<p class="text-center">Aucun commentaire - Sois le premier à commenter !</p>
+				{% else %}
+					{% for comment in paginatedComments %}
+						<div class="card-comment mx-auto my-2">
+							<img class="card-avatar rounded-3" src="{{comment.user|gravatar(80)}}" alt="">
+							<div>
+								<span class="h4">{{ comment.user.pseudo }}
+								</span>
+								<span class="fw-light fst-italic fs-6">le
+									{{ comment.date|format_datetime(locale='fr') }}
+								</span>
+								<p>{{ comment.content }}
+								</p>
+							</div>
+						</div>
+
+					{% endfor %}
+
+					{% if (paginatedComments|length) is not same as (trick.comments|length) %}
+						<a href="{{path('trick_view', {page: (page + 1), id: trick.id})}}" class="card-loadmore btn btn-warning h3 fs-5 text-dark">
+							Afficher d'autres commentaires</a>
+					{% endif %}
+
+				{% endif %}
+			</div>
+
+		</div>
+
+	{% endblock %}

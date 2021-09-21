@@ -65,6 +65,16 @@ class Trick
     private $images;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $modifiedDate;
+
+    /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
     private $comments;
@@ -73,6 +83,7 @@ class Trick
      * @ORM\OneToMany(targetEntity=Contribution::class, mappedBy="trick")
      */
     private $contributions;
+
 
 
     public function __construct()
@@ -299,6 +310,30 @@ class Trick
                 $contribution->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getModifiedDate(): ?\DateTimeInterface
+    {
+        return $this->modifiedDate;
+    }
+
+    public function setModifiedDate(?\DateTimeInterface $modifiedDate): self
+    {
+        $this->modifiedDate = $modifiedDate;
 
         return $this;
     }
