@@ -12467,12 +12467,53 @@ fieldset {
   display: none;
 }
 
+/* LOGIN */
+.page-login {
+  margin-top: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.page-login h1, .page-login .h1 {
+  -webkit-transform: rotate(-2deg);
+          transform: rotate(-2deg);
+}
+
+.card-login {
+  max-width: 400px;
+  margin: 10px;
+  width: 100%;
+}
+
+.card-login-reset {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 /* NAVBAR */
 .navbar-collapse {
   z-index: 1;
   width: 100%;
   position: absolute;
-  top: 52px;
+  top: 68px;
   left: 0;
 }
 
