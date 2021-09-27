@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Contribuer
+{% endblock %}
+
+{% block body %}
+
+	<div class="hero">
+		<div class="hero-title">
+			<h1>SnowTricks</h1>
+			<p class="h3">Le plaisir vient avec la technique alors partageons-la !</p>
+			<a href="#linkToTricks" class="to-tricks btn btn-warning">
+				<i class="bi bi-arrow-down"></i>
+			</a>
+		</div>
+	</div>
+
+	<span id="linkToTricks" class="d-block"></span>
+	<div class="min-height-100">
+		<h2 class="home-h2 text-center">- Les Tricks -</h2>
+		<div class="tricks-list container-xxl" id="tricks">
+			{% include "trick/_tricks.html.twig" %}
+		</div>
+		<button class="h1 btn btn-warning more-tricks" id="loadMore">Voir plus de Trick</button>
+	</div>
+{% endblock %}

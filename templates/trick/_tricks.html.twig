@@ -1,0 +1,24 @@
+{% for trick in paginatedTricks %}
+	<div class="home-card card m-1 ">
+		{% if trick.imageInFront %}
+			<a href="{{path('trick_view', {slug: trick.slug})}}" class="card-img-top" style="background: url(' {{'/img_uploads/'~ trick.imageInFront.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 10px"></a>
+		{% else %}
+			<a href="{{path('trick_view', {slug: trick.slug})}}" class="card-img-top" style="background: url('/src/img/no_img.svg') no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0"></a>
+		{% endif %}
+		<div class="card-body">
+			<a class="h1 home-card-title text-center m-auto" href="{{path('trick_view', {slug: trick.slug})}}">{{ trick.title }}
+			</a>
+			<div class="d-flex flex-column">
+				{% if app.user %}
+					<a href="{{path('contribution_edit_trick', {slug: trick.slug})}}" class="btn btn-primary bi bi-pencil-square"></a>
+				{% endif %}
+				{% if app.user and is_granted("ROLE_ADMIN") %}
+					<a href="{{path('trick_view', {slug: trick.slug})}}" class="btn btn-danger bi bi-trash-fill mt-1"></a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endfor %}
+{% block script %}
+	<script src="{{ asset('src/js/loadMore.js') }}"></script>
+{% endblock %}

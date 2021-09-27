@@ -108,6 +108,7 @@ class AppFixtures extends Fixture
         $admin->setPseudo('Admin')
             ->setEmail('admin@gmail.com')
             ->setPassword($hash)
+            ->setIsVerified(\true)
             ->setRoles([User::ROLE_ADMIN]);
         $manager->persist($admin);
 
@@ -119,6 +120,7 @@ class AppFixtures extends Fixture
             $user->setPseudo($faker->userName())
                 ->setEmail("user$u@gmail.com")
                 ->setPassword($hash)
+                ->setIsVerified(\true)
                 ->setRoles([User::ROLE_USER, User::ROLE_CONTRIBUTOR]);
 
             $manager->persist($user);

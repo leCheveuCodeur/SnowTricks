@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset ton mot de passe !
+{% endblock %}
+
+{% block body %}
+	<div class="container-xxl">
+		<div class="page-login">
+			<h1 class="h1 mb-3 font-weight-normal">Change ton mot de passe ICI</h1>
+			<div class="card-login card mb-4 px-3 py-4">
+
+				{{ form_start(resetForm) }}
+				{{ form_row(resetForm.plainPassword) }}
+				<button class="btn btn-primary">
+					<i class="bi bi-check-square me-1"></i>Enregistrer</button>
+				{{ form_end(resetForm) }}
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

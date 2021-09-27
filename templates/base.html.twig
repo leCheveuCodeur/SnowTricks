@@ -22,10 +22,8 @@
 			{% include "shared/_navbar.html.twig" %}
 		</header>
 		<main>
-			<div class="container-xxl">
-				{% include "shared/_alert.html.twig" %}
-				{% block body %}{% endblock %}
-			</div>
+			{% include "shared/_alert.html.twig" %}
+			{% block body %}{% endblock %}
 		</main>
 		{% block javascripts %}
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
