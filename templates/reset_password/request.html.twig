@@ -4,24 +4,26 @@
 {% endblock %}
 
 {% block body %}
-	{% for flashError in app.flashes('reset_password_error') %}
-		<div class="alert alert-danger" role="alert">{{ flashError }}</div>
-	{% endfor %}
-	<div class="page-login">
-		<h1 class="h1 mb-3 font-weight-normal">1ere Etape pour Changer ton mot de passe</h1>
-		<div class="card-login card mb-4 px-3 py-4">
+	<div class="container-xxl">
+		{% for flashError in app.flashes('reset_password_error') %}
+			<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+		{% endfor %}
+		<div class="page-login">
+			<h1 class="h1 mb-3 font-weight-normal">1ere Etape pour Changer ton mot de passe</h1>
+			<div class="card-login card mb-4 px-3 py-4">
 
-			{{ form_start(requestForm) }}
-			{{ form_row(requestForm.email) }}
-			<div>
-				<small>
-					Entres ton adresse e-mail pour recevoir le lien de réinitialisation de ton mot de passe.
-				</small>
+				{{ form_start(requestForm) }}
+				{{ form_row(requestForm.email) }}
+				<div>
+					<small>
+						Entres ton adresse e-mail pour recevoir le lien de réinitialisation de ton mot de passe.
+					</small>
+				</div>
+
+				<button class="btn btn-primary mt-3" type="submit">
+					<i class="bi bi-envelope me-1"></i>Envoyer le lien</button>
+				{{ form_end(requestForm) }}
 			</div>
-
-			<button class="btn btn-primary mt-3" type="submit">
-				<i class="bi bi-envelope me-1"></i>Envoyer le lien</button>
-			{{ form_end(requestForm) }}
 		</div>
 	</div>
 {% endblock %}

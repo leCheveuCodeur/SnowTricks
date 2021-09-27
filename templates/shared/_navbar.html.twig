@@ -1,25 +1,29 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-expand-md navbar-light">
 	<div class="container-xxl">
-		<a href="#" class="navbar-brand h1">Snowtricks</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<a href="{{path('homepage')}}" class="navbar-brand h1">Snowtricks</a>
+		<button class="navbar-toggler bg-white bg-opacity-50" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="collapse navbar-collapse flex justify-content-end text-center py-3 bg-light border-top-0" id="navbarNav">
-			<ul class="navbar-nav">
+		<div class="collapse navbar-collapse flex justify-content-end text-center py-3 border-top-0" id="navbarNav">
+			<ul class="navbar-nav h1 fs-5">
 				<div class="d-md-flex">
 
 					<li class="nav-item">
-						<a class="nav-link" href="#">Accueil</a>
+						<a class="nav-link" href="{{path('homepage')}}">Accueil</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Les Tricks</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{path('app_login')}}">Se Connecter</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Déconnect'</a>
-					</li>
+					{% if app.user %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('contribution_edit_trick')}}"><i class="bi bi-plus-circle-fill me-1"></i>Nouveau Trick</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('app_logout')}}">Déconnect'</a>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('app_login')}}">Se Connecter</a>
+						</li>
+					{% endif %}
+
 				</div>
 			</ul>
 		</div>

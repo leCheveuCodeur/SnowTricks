@@ -14,12 +14,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContributionController extends AbstractController
 {
     /**
-     * @Route("/contribuer/trick/{id?<\d+>}", name="contribution_edit_trick")
+     * @Route("/contribuer/trick/{slug?}", name="contribution_edit_trick")
+     * @IsGranted("ROLE_USER")
      */
     public function editTrick(?Trick $trick = \null, Request $request, FileUploaderHelper $fileUploaderHelper, EntityManagerInterface $em): Response
     {

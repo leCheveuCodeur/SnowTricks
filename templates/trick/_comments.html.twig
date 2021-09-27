@@ -1,0 +1,17 @@
+{% for comment in paginatedComments %}
+	<div class="card-comment mx-auto my-2">
+		<img class="card-avatar rounded-3" src="{{comment.user|gravatar(80)}}" alt="">
+		<div>
+			<span class="h4">{{ comment.user.pseudo }}
+			</span>
+			<span class="fw-light fst-italic fs-6">le
+				{{ comment.date|format_datetime(locale='fr') }}
+			</span>
+			<p>{{ comment.content }}
+			</p>
+		</div>
+	</div>
+
+{% endfor %}
+
+

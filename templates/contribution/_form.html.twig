@@ -168,14 +168,14 @@
 				</div>
 				{# ---------- Modal ------------ #}
 				{% if not trick or not trick.imageInFront %}
-					<div class="d-flex justify-content-center align-items-center" style="background: url('/src/img/no_img.svg') no-repeat center/50%; height: 40vh; border-radius: 10px 10px 0 0">
+					<div class="d-flex justify-content-center align-items-center shadow-sm" style="background: url('/src/img/no_img.svg') no-repeat center/50%; height: 40vh; border-radius: 10px 10px 0 0">
 					{% else %}
-						<div class="d-flex justify-content-center align-items-center" style="background: url({{ asset('/img_uploads/'~ trick.imageInFront.fileName)}}) no-repeat center; background-size: cover; height: 40vh; border-radius: 10px 10px 0 0">
+						<div class="d-flex justify-content-center align-items-center shadow-sm" style="background: url({{ asset('/img_uploads/'~ trick.imageInFront.fileName)}}) no-repeat center; background-size: cover; height: 40vh; border-radius: 10px 10px 0 0">
 						{% endif %}
 
 						<div class="w-100 px-lg-5 px-1">
 							{% if trick %}
-								<h2 class="card-trick_title text-center">
+								<h2 class="card-trick_title text-center shadow-sm">
 									{{ trick.title }}
 								</h2>
 							{% else %}
