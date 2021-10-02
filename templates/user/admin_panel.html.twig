@@ -1,0 +1,75 @@
+{% set contributions = 0 %}
+{% for trick in tricks %}
+	{% for contribution in trick.contributions %}
+		{% set contributions = contributions + 1 %}
+	{% endfor %}
+{% endfor %}
+
+{% extends "base.html.twig" %}
+
+{% block title %}Administration des contributions
+{% endblock %}
+
+{% block body %}
+	{% if is_granted('ROLE_ADMIN') %}
+		{% include "user/_admin.view.html.twig" %}
+	{% else %}
+		{% include "user/_author_view.html.twig" %}
+	{% endif %}
+
+	{% if not is_granted("ROLE_ADMIN") %}
+		{% for trick in tricks %}
+			{% if trick.author is same as app.user %}
+				<!-- Modal -->
+				<div class="modal fade" id="deleteTrick{{trick.id}}Modal" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content modal-500">
+							<div class="modal-header">
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<p>Es-tu sûr de vouloir
+									<strong>supprimer définitivement</strong>
+									ce Trick ?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+									Annuler
+								</button>
+								<a href="{{path('trick_delete', {id: trick.id})}}" class="btn btn-danger mt-1">
+									<i class="bi bi-trash-fill me-1"></i>Oui, Supprimer
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	{% else %}
+		{% for trick in tricks %}
+			<!-- Modal -->
+			<div class="modal fade" id="deleteTrick{{trick.id}}Modal" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content modal-500">
+						<div class="modal-header">
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p>Es-tu sûr de vouloir
+								<strong>supprimer définitivement</strong>
+								ce Trick ?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+								Annuler
+							</button>
+							<a href="{{path('trick_delete', {id: trick.id})}}" class="btn btn-danger mt-1">
+								<i class="bi bi-trash-fill me-1"></i>Oui, Supprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endblock %}

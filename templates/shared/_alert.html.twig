@@ -1,8 +1,11 @@
 <div class="container-xxl">
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mx-auto">
-			<i class="bi bi-check-lg"></i>
-			{{ message }}
-		</div>
-	{% endfor %}
+	<div class="alert-container">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+				<i class="bi bi-check-lg"></i>
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		{% endfor %}
+	</div>
 </div>

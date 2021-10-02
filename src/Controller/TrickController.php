@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\CommentType;
@@ -13,18 +14,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/{page<\d+>?1}", name="homepage", priority=1)
+     * @Route("/{page<\d+>?1}", name="homepage")
      */
     public function allTricks(TrickRepository $trickRepository, ?string $page): Response
     {
         $tricks = $trickRepository->findAll();
 
-        $limit = 5;
+        $limit = 8;
         $paginatedTricks = $trickRepository->getLoadMoreTricks($page, $limit);
 
         if ($page > 1) {
@@ -34,8 +36,9 @@ class TrickController extends AbstractController
             ]);
         }
 
-        return $this->renderForm('trick/homepage.html.twig', [
+        return $this->render('trick/homepage.html.twig', [
             'paginatedTricks' => $paginatedTricks,
+            'endOfCollection' => (($page * $limit) > count($tricks))
         ]);
     }
 
@@ -61,6 +64,7 @@ class TrickController extends AbstractController
             /** @var Comment */
             $comment = $formViewComment->getData();
             $comment->setDate(new DateTime())
+                ->setUser($this->getUser())
                 ->setTrick($trick);
 
             // \dd($formViewComment, $comment, $request);
@@ -69,6 +73,10 @@ class TrickController extends AbstractController
 
             $this->addFlash('success', 'Ton commentaire à bien été ajouté !');
             return $this->redirect($request->getUri());
+        }
+        foreach ($paginatedComments as $comment) {
+            $user = $comment->getUser();
+            \dump($user);
         }
 
         return $this->renderForm('trick/view_trick.html.twig', [
@@ -79,4 +87,17 @@ class TrickController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/admin/trick/{id<\d+>}/suppression", name="trick_delete")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function deleteTrick(Trick $trick, EntityManagerInterface $em): Response
+    {
+        $em->remove($trick);
+        $em->flush();
+
+        $this->addFlash('success', 'Suppression réussie du Trick');
+
+        return $this->redirectToRoute('homepage');
+    }
 }

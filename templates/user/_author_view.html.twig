@@ -1,0 +1,19 @@
+<div class="container-xxl">
+	<nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<button class="nav-link active" id="nav-new-contribution-tab" data-bs-toggle="tab" data-bs-target="#nav-new-contribution" type="button" role="tab" aria-controls="nav-new-contribution" aria-selected="false">Nouvelles Contributions</button>
+			<button class="nav-link" id="nav-my-tricks-tab" data-bs-toggle="tab" data-bs-target="#nav-my-tricks" type="button" role="tab" aria-controls="nav-my-tricks" aria-selected="false">Mes Tricks</button>
+		</div>
+	</nav>
+	<div
+		class="tab-content" id="nav-tabContent">
+		{# New Contribs ----------------------------------------------------#}
+		<div class="tab-pane fade active show" id="nav-new-contribution" role="tabpanel" aria-labelledby="nav-new-contribution-tab">
+			{% include "user/panel/_contributions.html.twig" %}
+		</div>
+
+		{# My Tricks ----------------------------------------------------#}
+		<div class="tab-pane fade" id="nav-my-tricks" role="tabpanel" aria-labelledby="nav-my-tricks-tab">
+			{% include "user/panel/_my_tricks.html.twig" %}
+		</div>
+	</div>

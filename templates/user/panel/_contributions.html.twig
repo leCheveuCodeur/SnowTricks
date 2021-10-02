@@ -1,0 +1,50 @@
+{% set contributions = 0 %}
+{% for trick in tricks %}
+	{% for contribution in trick.contributions %}
+		{% set contributions = contributions + 1 %}
+	{% endfor %}
+{% endfor %}
+
+<h1 class="text-center admin-title">- Contributions en attentes de traitement :
+	<span class="text-warning">{{ contributions }}</span>
+	-</h1>
+	
+{% if contributions > 0 %}
+	{% for trick in tricks %}
+		{% if trick.contributions|length > 0 %}
+			<div class="card container-xxl bg-light py-4 my-3">
+				<h2>-
+					{{ trick.title }}
+					-
+				</h3>
+				<table class="table table-dark table-striped">
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Pseudo</th>
+							<th scope="col">Date</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for contribution in trick.contributions %}
+							<tr>
+								<th scope="row">{{ contribution.id }}
+								</th>
+								<td>{{ contribution.user.pseudo }}
+								</td>
+								<td>le
+									{{ contribution.date|format_datetime(locale='fr') }}
+								</td>
+								<td>
+									<a href="{{path('contribution_view', {id: contribution.id})}}" class="btn btn-primary bi bi-eye">
+										Afficher</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% endif %}
+		</div>
+	{% endfor %}
+{% endif %}

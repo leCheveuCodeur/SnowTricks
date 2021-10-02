@@ -82,7 +82,7 @@ class Image
         return $this->in_front;
     }
 
-    public function setInFront(?int $in_front): self
+    public function setInFront(?int $in_front = null): self
     {
         $this->in_front = $in_front;
 
@@ -94,7 +94,7 @@ class Image
         return $this->trick;
     }
 
-    public function setTrick(?Trick $trick): self
+    public function setTrick(?Trick $trick = null): self
     {
         $this->trick = $trick;
 

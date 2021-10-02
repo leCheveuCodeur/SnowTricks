@@ -43,9 +43,15 @@ class Trick
     private $content;
 
     /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="tricks")
      */
-    private $users;
+    private $contributors;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
@@ -53,13 +59,13 @@ class Trick
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      * @Groups("trick:read")
      */
     private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      * @Groups("trick:read")
      */
     private $images;
@@ -80,15 +86,13 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Contribution::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Contribution::class, mappedBy="trick", fetch="EXTRA_LAZY", orphanRemoval=true)
      */
     private $contributions;
 
-
-
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->contributors = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -151,15 +155,15 @@ class Trick
     /**
      * @return Collection|User[]
      */
-    public function getUsers(): Collection
+    public function getContributors(): Collection
     {
-        return $this->users;
+        return $this->contributors;
     }
 
-    public function addUser(User $user): self
+    public function addContributor(User $user): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
+        if (!$this->contributors->contains($user)) {
+            $this->contributors[] = $user;
             $user->addTricks($this);
         }
 
@@ -334,6 +338,18 @@ class Trick
     public function setModifiedDate(?\DateTimeInterface $modifiedDate): self
     {
         $this->modifiedDate = $modifiedDate;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
