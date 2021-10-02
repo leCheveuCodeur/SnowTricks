@@ -1,0 +1,76 @@
+<h1 class="text-center admin-title">- Tricks des Contributeurs:
+	<span class="text-warning">{{ tricks|length }}</span>
+	-</h1>
+{% if tricks|length > 0 %}
+	<div class="card container-xxl bg-light py-4 my-3">
+		<table class="table table-dark table-striped">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Titre</th>
+					<th scope="col">Auteur</th>
+					<th scope="col">Date de création</th>
+					<th scope="col">Date de modification</th>
+					<th scope="col">Nb de Contributeurs</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for trick in tricks %}
+					{% if trick.author is not same as app.user %}
+						<tr>
+							<th scope="row">{{ trick.id }}
+							</th>
+							<td>{{ trick.title }}
+							</td>
+							<td>{{ trick.author.pseudo }}
+							</td>
+							<td>le
+								{{ trick.creationDate|format_datetime(locale='fr') }}
+							</td>
+							<td>le
+								{{ trick.modifiedDate|format_datetime(locale='fr') }}
+							</td>
+							<td>
+								{{ trick.contributors|length }}
+							</td>
+							<td>
+								<a href="{{path('trick_view', {slug: trick.slug})}}" class="btn btn-primary bi bi-eye"></a>
+								{% if app.user and is_granted("ROLE_ADMIN") %}
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTrick{{trick.id}}Modal">
+										<i class="bi bi-trash-fill"></i>
+									</button>
+								{% endif %}
+							</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
+		{% for trick in tricks %}
+			<!-- Modal -->
+			<div class="modal fade" id="deleteTrick{{trick.id}}Modal" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content modal-500">
+						<div class="modal-header">
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p>Es-tu sûr de vouloir
+								<strong>supprimer définitivement</strong>
+								ce Trick ?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+								Annuler
+							</button>
+							<a href="{{path('trick_delete', {id: trick.id})}}" class="btn btn-danger mt-1">
+								<i class="bi bi-trash-fill me-1"></i>Oui, Supprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}

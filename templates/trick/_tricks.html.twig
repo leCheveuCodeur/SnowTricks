@@ -1,7 +1,7 @@
 {% for trick in paginatedTricks %}
 	<div class="home-card card m-1 ">
 		{% if trick.imageInFront %}
-			<a href="{{path('trick_view', {slug: trick.slug})}}" class="card-img-top" style="background: url(' {{'/img_uploads/'~ trick.imageInFront.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 10px"></a>
+			<a href="{{path('trick_view', {slug: trick.slug})}}" class="card-img-top" style="background: url(' {{'/img_uploads/'~ trick.imageInFront.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 0"><img src="" alt=""></a>
 		{% else %}
 			<a href="{{path('trick_view', {slug: trick.slug})}}" class="card-img-top" style="background: url('/src/img/no_img.svg') no-repeat center/50% #f8fafb; height: 30vh; border-radius: 10px 10px 0 0"></a>
 		{% endif %}
@@ -10,15 +10,40 @@
 			</a>
 			<div class="d-flex flex-column">
 				{% if app.user %}
-					<a href="{{path('contribution_edit_trick', {slug: trick.slug})}}" class="btn btn-primary bi bi-pencil-square"></a>
+					<a href="{{path('contribution_new', {slug: trick.slug})}}" class="btn btn-primary bi bi-pencil-square"></a>
 				{% endif %}
 				{% if app.user and is_granted("ROLE_ADMIN") %}
-					<a href="{{path('trick_view', {slug: trick.slug})}}" class="btn btn-danger bi bi-trash-fill mt-1"></a>
+					<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTrick{{trick.id}}Modal">
+						<i class="bi bi-trash-fill"></i>
+					</button>
+
 				{% endif %}
 			</div>
 		</div>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="deleteTrick{{trick.id}}Modal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content modal-500">
+				<div class="modal-header">
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>Es-tu sûr de vouloir <strong>supprimer définitivement</strong> ce Trick ?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+						Annuler
+					</button>
+					<a href="{{path('trick_delete', {id: trick.id})}}" class="btn btn-danger mt-1">
+						<i class="bi bi-trash-fill me-1"></i>Oui, Supprimer
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endfor %}
+
 {% block script %}
 	<script src="{{ asset('src/js/loadMore.js') }}"></script>
 {% endblock %}

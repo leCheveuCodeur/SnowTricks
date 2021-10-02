@@ -109,7 +109,7 @@ class AppFixtures extends Fixture
             ->setEmail('admin@gmail.com')
             ->setPassword($hash)
             ->setIsVerified(\true)
-            ->setRoles([User::ROLE_ADMIN]);
+            ->setRoles([User::ROLE_ADMIN, User::ROLE_AUTHOR]);
         $manager->persist($admin);
 
         // 5 Users
@@ -121,7 +121,7 @@ class AppFixtures extends Fixture
                 ->setEmail("user$u@gmail.com")
                 ->setPassword($hash)
                 ->setIsVerified(\true)
-                ->setRoles([User::ROLE_USER, User::ROLE_CONTRIBUTOR]);
+                ->setRoles([User::ROLE_USER, User::ROLE_AUTHOR]);
 
             $manager->persist($user);
         }
@@ -151,7 +151,7 @@ class AppFixtures extends Fixture
                 ->setLeadIn($lead_in)
                 ->setContent($content)
                 ->setCreationDate($faker->dateTime('-6 months'))
-                ->addUser($this->userRepository->findOneBy(['email' => $trick_data[0]]));
+                ->setAuthor($this->userRepository->findOneBy(['email' => $trick_data[0]]));
 
             $manager->persist($trick);
         }
@@ -173,13 +173,13 @@ class AppFixtures extends Fixture
 
         // IMG Files
         foreach ($tricks as $trick_data) {
-            foreach ($trick_data[5] as $trick_img) {
+            foreach ($trick_data[5] as $key => $trick_img) {
                 $img = new Image;
                 $img->setFileName($trick_img)
                     ->setOriginalFileName($trick_img)
                     ->setTitle($this->slugger->slug(\preg_replace("/\.\w+$/", '', $trick_img), ' ', 'fr_Fr'))
                     ->setTrick($this->trickRepository->findOneBy(['title' => $trick_data[1]]));
-
+                $key === 0 ? $img->setInFront(1) : null;
                 $manager->persist($img);
             }
         }
@@ -200,7 +200,7 @@ class AppFixtures extends Fixture
         $tricksAll = $this->trickRepository->findAll();
         $usersAll = $this->userRepository->findAll();
 
-        for ($c = 0; $c < 30; $c++) {
+        for ($c = 0; $c < 80; $c++) {
             $comment = new Comment;
             $comment->setUser($usersAll[\mt_rand(0, 5)]);
             $comment->setTrick($tricksAll[\mt_rand(0, 9)])

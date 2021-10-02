@@ -1,6 +1,7 @@
 {% for comment in paginatedComments %}
+
 	<div class="card-comment mx-auto my-2">
-		<img class="card-avatar rounded-3" src="{{comment.user|gravatar(80)}}" alt="">
+		<img class="card-avatar rounded-3" src="{{comment.user|gravatar(80)}}" alt="avatar">
 		<div>
 			<span class="h4">{{ comment.user.pseudo }}
 			</span>
@@ -13,5 +14,3 @@
 	</div>
 
 {% endfor %}
-
-

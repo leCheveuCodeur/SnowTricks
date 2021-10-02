@@ -85,7 +85,9 @@ class VideoType extends AbstractType
                 $video->setTitle(\substr($video->getTitle(), 0, 70));
             }
             $video->setLink($this->embedlyUrlHelper->embed($video->getLink()));
-            \dump($video->getLink());
+
+            $formEvent->setData($video);
+            \dump($video, $formEvent);
         });
     }
 

@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block body %}
-
 	<div class="hero">
 		<div class="hero-title">
 			<h1>SnowTricks</h1>
@@ -16,11 +15,13 @@
 	</div>
 
 	<span id="linkToTricks" class="d-block"></span>
-	<div class="min-height-100">
+	<div class="min-height-100 mb-5">
 		<h2 class="home-h2 text-center">- Les Tricks -</h2>
 		<div class="tricks-list container-xxl" id="tricks">
 			{% include "trick/_tricks.html.twig" %}
 		</div>
-		<button class="h1 btn btn-warning more-tricks" id="loadMore">Voir plus de Trick</button>
+		{% if not endOfCollection %}
+			<button class="h1 btn btn-warning more-tricks" id="loadMore">Voir plus de Trick</button>
+		{% endif %}
 	</div>
 {% endblock %}

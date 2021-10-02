@@ -1,0 +1,57 @@
+{% set myTricks = 0 %}
+{% for trick in tricks %}
+	{% if trick.author is same as app.user %}
+		{% set myTricks = myTricks + 1 %}
+	{% endif %}
+{% endfor %}
+
+<h1 class="text-center admin-title">- Mes Tricks :
+	<span class="text-warning">{{ myTricks}}</span>
+	-</h1>
+
+{% if myTricks > 0 %}
+	<div class="card container-xxl bg-light py-4 my-3">
+		<table class="table table-dark table-striped">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Titre</th>
+					<th scope="col">Date de création</th>
+					<th scope="col">Date de modification</th>
+					<th scope="col">Nb de Contributeurs</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for trick in tricks %}
+					{% if trick.author is same as app.user %}
+						<tr>
+							<th scope="row">{{ trick.id }}
+							</th>
+							<td>{{ trick.title }}
+							</td>
+							<td>le
+								{{ trick.creationDate|format_datetime(locale='fr') }}
+							</td>
+							<td>le
+								{{ trick.modifiedDate|format_datetime(locale='fr') }}
+							</td>
+							<td>
+								{{ trick.contributors|length }}
+							</td>
+							<td>
+								<a href="{{path('trick_view', {slug: trick.slug})}}" class="btn btn-primary bi bi-eye">
+									Afficher</a>
+								{% if app.user and is_granted("ROLE_ADMIN") %}
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTrick{{trick.id}}Modal">
+										<i class="bi bi-trash-fill me-1"></i>
+									</button>
+								{% endif %}
+							</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endif %}

@@ -33,4 +33,12 @@ class TrickRepository extends ServiceEntityRepository
             ->setMaxResults($limit * $page);
         return $query->getQuery()->getResult();
     }
+
+    public function getTricksByUserId(int $userId)
+    {
+        $query = $this->createQueryBuilder('t')
+            ->where('t.author = :id')
+            ->setParameter('id',$userId);
+        return $query->getQuery()->getResult();
+    }
 }

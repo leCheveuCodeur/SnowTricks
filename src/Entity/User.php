@@ -12,12 +12,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"}, message="Il existe déjà un compte avec cet email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_USER = 'ROLE_USER';
+    const ROLE_AUTHOR = 'ROLE_AUTHOR';
     const ROLE_CONTRIBUTOR = 'ROLE_CONTRIBUTOR';
 
     /**
@@ -59,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Trick::class, inversedBy="users")
+     * @ORM\ManyToMany(targetEntity=Trick::class, inversedBy="contributors" , fetch="EXTRA_LAZY")
      */
     private $tricks;
 
@@ -68,11 +69,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $isVerified = false;
 
+
     public function __construct()
     {
         $this->contributions = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->tricks = new ArrayCollection();
+        $this->tricksByThisAuthor = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -271,4 +274,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+
 }

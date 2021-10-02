@@ -1,6 +1,8 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Contribuer
+{% block title %}SnowTricks -
+	{{ trick.title }}
+
 {% endblock %}
 
 {% block body %}
@@ -9,6 +11,40 @@
 
 			<div class="row">
 				<div class="col">
+					{% if app.user %}
+						<div class="card-link_top_end">
+							<a href="{{path('contribution_new', {slug: trick.slug})}}" class="btn btn-primary bi bi-pencil-square"></a>
+							{% if app.user and is_granted("ROLE_ADMIN") %}
+								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTrickModal">
+									<i class="bi bi-trash-fill"></i>
+								</button>
+								<!-- Modal -->
+								<div class="modal fade" id="deleteTrickModal" tabindex="-1" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered">
+										<div class="modal-content modal-500">
+											<div class="modal-header">
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<p>Es-tu sûr de vouloir
+													<strong>supprimer définitivement</strong>
+													ce Trick ?</p>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+													Annuler
+												</button>
+												<a href="{{path('trick_delete', {id: trick.id})}}" class="btn btn-danger mt-1">
+													<i class="bi bi-trash-fill me-1"></i>Oui, Supprimer
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						</div>
+					{% endif %}
+
 					{% if not trick.imageInFront %}
 						<div class="d-flex justify-content-center align-items-center shadow-sm" style="background: url('/src/img/no_img.svg') no-repeat center/50%; height: 40vh; border-radius: 10px 10px 0 0">
 						{% else %}
@@ -33,12 +69,21 @@
 						<div class="card-medias py-2 collapse" id="collapseMediasCards">
 							<div id="medias" class="media-list">
 								{% for image in trick.images %}
-									<div class="card m-1">
-										<div class="card-img-top" style="background: url(' {{'/img_uploads/'~ image.filename}} ') no-repeat center 40%/cover; height: 30vh; border-radius: 10px 10px 0 10px"></div>
+									<div class="card m-1 bg-dark border-0 no-btn">
+										<img class="card-img" src="{{'/img_uploads/'~ image.filename}}" alt="{{image.title}}" data-bs-toggle="modal" data-bs-target="#modalImg-{{image.id}}">
+									</div>
+									<!-- Modal -->
+									<div class="modal fade" id="modalImg-{{image.id}}" tabindex="-1" aria-labelledby="image {{image.title}}" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content rounded-3 border-0">
+												<button type="button" class="btn-close bg-light m-1 ms-auto z-index-1" data-bs-dismiss="modal" aria-label="Close"></button>
+												<img class="w-100 position-absolute rounded-3" src="{{'/img_uploads/'~ image.filename}}" alt="{{image.title}}">
+											</div>
+										</div>
 									</div>
 								{% endfor %}
 								{% for video in trick.videos %}
-									<div class="card m-1">
+									<div class="card m-1 no-btn">
 										<iframe class="card-img-top" src="{{video.link}}" title="Video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 									</div>
 								{% endfor %}
@@ -65,7 +110,11 @@
 								</i>
 								{{ (trick.modifiedDate ? trick.modifiedDate : trick.creationDate)|date("d/m/Y")}}
 							</span>
-							{% for user in trick.users %}
+							<span class="badge bg-warning text-dark">
+								<i class="bi bi-pen me-1"></i>
+								{{ trick.author.pseudo }}
+							</span>
+							{% for user in trick.contributors %}
 								<span class="badge bg-warning text-dark">
 									<i class="bi bi-pen me-1"></i>
 									{{ user.pseudo }}

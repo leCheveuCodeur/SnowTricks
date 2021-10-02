@@ -163,14 +163,13 @@ class ContributionType extends AbstractType
             [
                 'mapped' => false,
                 'label' => 'Image mise en avant',
-                // 'placeholder' =>  $isExistantTrick && $this->trick->getImageInFront() ? \preg_replace("/-\w+(?=\.\w+$)/", '', $this->trick->getImageInFront()->getFileName()) : '-- Choisir l\'image mise en avant --',
                 'placeholder' => '-- Choisir l\'image mise en avant --',
                 'choices' => $choiceList,
                 'choice_attr' => $choiceAttr,
                 'required' => \false,
             ]
         )
-            //reset the ChoiceToValueTransformer to allow for my list custom
+            // reset the ChoiceToValueTransformer to allow for my list custom
             ->get('image_in_front')->resetViewTransformers();
     }
 

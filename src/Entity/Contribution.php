@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ContributionRepository;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TrickRepository;
+use App\Repository\ContributionRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -43,7 +44,7 @@ class Contribution
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="contributions")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="contributions")
      * @Assert\Valid()
      */
     private $user;
@@ -54,13 +55,13 @@ class Contribution
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="contribution", fetch="EXTRA_LAZY", cascade={"persist","remove"})
      * @Assert\Valid()
      */
     private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="contribution", fetch="EXTRA_LAZY", cascade={"persist","remove"})
      * @Assert\Valid()
      */
     private $images;
@@ -99,9 +100,11 @@ class Contribution
         return $this->date;
     }
 
-    public function setDate(): self
+    public function setDate(?datetime $date = null): self
     {
-        $date = new DateTime();
+        if (!$date) {
+            $date = new DateTime();
+        }
         $this->date = $date;
 
         return $this;
@@ -225,5 +228,12 @@ class Contribution
         $this->trick = $trick;
 
         return $this;
+    }
+
+    public function getImageInFront()
+    {
+        /** @var Image */
+        $image = $this->images->matching(TrickRepository::createImgInFrontCriteria())[0];
+        return $image;
     }
 }
