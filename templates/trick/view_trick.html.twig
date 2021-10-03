@@ -123,18 +123,25 @@
 						</div>
 					</div>
 
-					<h2 class="text-center fs-1">- Vas-y Commentes ! -</h2>
-					{{ form_start(formViewComment, {'attr': {'class': 'trick-post_comment'}}) }}
-					{{ form_errors(formViewComment) }}
+					{% if app.user %}
+						<h2 class="text-center fs-1">- Vas-y Commentes ! -</h2>
+						{{ form_start(formViewComment, {'attr': {'class': 'trick-post_comment'}}) }}
+						{{ form_errors(formViewComment) }}
 
-					{{ form_row(formViewComment.content) }}
+						{{ form_row(formViewComment.content) }}
 
-					<button type="submit" class="submit btn btn-warning text-uppercase text-dark fw-bold h1 fs-4 mb-3">
-						Commenter !
-					</button>
+						<button type="submit" class="submit btn btn-warning text-uppercase text-dark fw-bold h1 fs-4 mb-3">
+							Commenter !
+						</button>
 
-					{{ form_end(formViewComment) }}
-				</div>
+						{{ form_end(formViewComment) }}
+					</div>
+				{% else %}
+					<h2 class="text-center fs-1">- Connectes-toi pour Commenter ! -</h2>
+					<div class="d-flex justify-content-center my-2">
+						<a href="{{path('app_login')}}" class="h1 btn btn-warning m-2 fs-4 text-center d-block m-auto">Se Connecter</a>
+					</div>
+				{% endif %}
 
 				<h2 class="text-center fs-1">- Les Commentaires -</h2>
 				<div class="card-comments mx-auto p-3 rounded-3">

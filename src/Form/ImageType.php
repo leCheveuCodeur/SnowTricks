@@ -33,7 +33,6 @@ class ImageType extends AbstractType
         $index = intval($builder->getName());
         /** @var UploadedFile */
         $hasFile = $request->files->get('contribution')['images'][$index - 1]['file_name'] ?? false;
-        \dump($request, $hasFile);
 
         $builder
             ->add(
@@ -77,7 +76,6 @@ class ImageType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $formEvent) {
             $imageData = $formEvent->getData();
-            \dump($imageData);
             // Limit the number of characters in the title
             if (\strlen($imageData['title']) > 70) {
                 $imageData['title'] = \substr($imageData['title'], 0, 70);

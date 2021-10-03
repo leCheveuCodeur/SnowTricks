@@ -40,11 +40,10 @@
 								{{ trick.contributors|length }}
 							</td>
 							<td>
-								<a href="{{path('trick_view', {slug: trick.slug})}}" class="btn btn-primary bi bi-eye">
-									Afficher</a>
+								<a href="{{path('trick_view', {slug: trick.slug})}}" class="btn btn-primary bi bi-eye"></a>
 								{% if app.user and is_granted("ROLE_ADMIN") %}
 									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTrick{{trick.id}}Modal">
-										<i class="bi bi-trash-fill me-1"></i>
+										<i class="bi bi-trash-fill"></i>
 									</button>
 								{% endif %}
 							</td>

@@ -117,7 +117,7 @@ class ContributionController extends AbstractController
     public function editTrick(?Trick $trick = \null, Request $request, FileUploaderHelper $fileUploaderHelper, EntityManagerInterface $em): Response
     {
         $contribution = new Contribution;
-        //--------------------------------------------------------------------------------------------------------------------------------
+
         // Init existing Images by adding them in the Contribution
         if ($trick) {
             $contribution->setTrick($trick);
@@ -143,7 +143,6 @@ class ContributionController extends AbstractController
             }
         }
         // End of init
-        //--------------------------------------------------------------------------------------------------------------------------------
 
         // Remove from the request the media previously deleted but kept in memory by Symfony
         // and reindexing the request
@@ -166,7 +165,6 @@ class ContributionController extends AbstractController
                 foreach ($imagesInTheRequest as $key => $image) {
                     if ($key > $oldKey && \key_exists('title', $image)) {
                         $reindexedImages[] = $image;
-                        \dump($image);
                         if ($contributionFilesCopy && key_exists($key, $filesInTheRequest)) {
                             $reindexedFiles[$index] = $filesInTheRequest[$key];
                         }
@@ -207,9 +205,7 @@ class ContributionController extends AbstractController
                 $request->request->set('contribution', $contributionRequestCopy);
             }
         }
-
         // End of reindexing the request
-        //--------------------------------------------------------------------------------------------------------------------------------
 
         $formView = $this->createForm(ContributionType::class, $contribution);
         $formView->handleRequest($request);
