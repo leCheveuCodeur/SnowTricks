@@ -26,7 +26,6 @@ class UserController extends AbstractController
         if ($this->isGranted(User::ROLE_ADMIN)) {
             /** @var Contribution[] */
             $newTricks = $contributionRepository->matching($contributionRepository::createNewTrickCriteria());
-            // \dd($newTricks);
         }
 
         return $this->render('user/admin_panel.html.twig', [

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use DateTime;
-use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\CommentType;
@@ -67,16 +66,11 @@ class TrickController extends AbstractController
                 ->setUser($this->getUser())
                 ->setTrick($trick);
 
-            // \dd($formViewComment, $comment, $request);
             $em->persist($comment);
             $em->flush();
 
             $this->addFlash('success', 'Ton commentaire à bien été ajouté !');
             return $this->redirect($request->getUri());
-        }
-        foreach ($paginatedComments as $comment) {
-            $user = $comment->getUser();
-            \dump($user);
         }
 
         return $this->renderForm('trick/view_trick.html.twig', [

@@ -1,17 +1,3 @@
-{# {% if app.user %}
-	{% set contributions = 0 %}
-	{% for trick in app.user.tricks %}
-		{% for contribution in trick.contributions %}
-			{% set contributions = contributions + 1 %}
-		{% endfor %}
-	{% endfor %}
-
-	<pre>
-	{{ dump(app.user.trick) }}
-</pre>
-{% endif %} #}
-
-
 <nav class="navbar navbar-expand-md navbar-light">
 	<div class="container-xxl">
 		<a href="{{path('homepage')}}" class="navbar-brand h1">Snowtricks</a>
@@ -29,11 +15,6 @@
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('user_admin_panel')}}">
 								<i class="bi bi-clipboard-check me-1"></i>Admin'
-								{# <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-									{{ contributions }}
-									<span class="visually-hidden">
-										contributions en attente de validation</span>
-								</span> #}
 							</a>
 						</li>
 					{% endif %}

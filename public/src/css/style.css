@@ -12246,6 +12246,10 @@ thead th {
   z-index: 1;
 }
 
+.w-100 {
+  max-width: 100% !important;
+}
+
 /* BASE */
 @font-face {
   font-family: "reisregular";
@@ -12619,7 +12623,6 @@ fieldset {
 
 .modal-dialog {
   width: 96vw;
-  max-width: none;
 }
 
 /* HOME */

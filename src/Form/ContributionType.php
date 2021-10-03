@@ -21,14 +21,13 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ContributionType extends AbstractType
 {
-    private $trick;
     private $requestStack;
 
-    public function __construct(RequestStack $requestStack, Trick $trick)
+    public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
-        $this->trick = $trick;
     }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var Request */
@@ -43,8 +42,9 @@ class ContributionType extends AbstractType
         // See if contribution contains the data of one Trick
         /** @var Trick */
         $isExistantTrick = $contribution->getTrick() ?? \false;
-        /** @var Trick */
+
         $this->trick = $contribution->getTrick();
+        
         /** @var Image */
         $imagesInContribution = $contribution->getImages();
 
@@ -133,7 +133,6 @@ class ContributionType extends AbstractType
         if ($imagesInRequest) {
             foreach ($imagesInRequest as $key => $image) {
                 if (\key_exists('in_front', $image) && !$image['in_front']) {
-                    \dump($image);
                     if ($image['imageTarget'] && \key_exists('title', $image)) {
                         $choiceList[$image['title']] = $key;
                         $choiceAttr[$image['title']] = ['data-id' => $key];
@@ -141,7 +140,6 @@ class ContributionType extends AbstractType
                 } else if (!\key_exists('in_front', $image)) {
                     /** @var UploadedFile */
                     $file = $filesInResquest[$key]['file_name'];
-                    dump($file->getClientOriginalName());
                     $choiceList[$file->getClientOriginalName()] = $key;
                     $choiceAttr[$file->getClientOriginalName()] = ['data-id' => $key];
                 }
@@ -149,11 +147,8 @@ class ContributionType extends AbstractType
         } else {
             /** @var Image $image*/
             foreach ($imagesInContribution as $key => $image) {
-                // if (!$image->getInFront()) {
-                \dump($image);
                 $choiceList[$image->getOriginalFileName()] = $key;
                 $choiceAttr[$image->getOriginalFileName()] = ['data-id' => $key];
-                // }
             }
         }
 

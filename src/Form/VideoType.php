@@ -34,7 +34,6 @@ class VideoType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent) {
 
             $builder = $formEvent->getForm();
-            \dump($formEvent);
 
             /** @var Video */
             $existingVideo = $formEvent->getData();
@@ -87,7 +86,6 @@ class VideoType extends AbstractType
             $video->setLink($this->embedlyUrlHelper->embed($video->getLink()));
 
             $formEvent->setData($video);
-            \dump($video, $formEvent);
         });
     }
 

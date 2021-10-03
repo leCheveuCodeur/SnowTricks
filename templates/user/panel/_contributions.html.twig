@@ -8,7 +8,7 @@
 <h1 class="text-center admin-title">- Contributions en attentes de traitement :
 	<span class="text-warning">{{ contributions }}</span>
 	-</h1>
-	
+
 {% if contributions > 0 %}
 	{% for trick in tricks %}
 		{% if trick.contributions|length > 0 %}
@@ -16,7 +16,7 @@
 				<h2>-
 					{{ trick.title }}
 					-
-				</h3>
+				</h2>
 				<table class="table table-dark table-striped">
 					<thead>
 						<tr>
@@ -37,14 +37,13 @@
 									{{ contribution.date|format_datetime(locale='fr') }}
 								</td>
 								<td>
-									<a href="{{path('contribution_view', {id: contribution.id})}}" class="btn btn-primary bi bi-eye">
-										Afficher</a>
+									<a href="{{path('contribution_view', {id: contribution.id})}}" class="btn btn-primary bi bi-eye"></a>
 								</td>
 							</tr>
 						{% endfor %}
 					</tbody>
 				</table>
-			{% endif %}
-		</div>
+			</div>
+		{% endif %}
 	{% endfor %}
 {% endif %}

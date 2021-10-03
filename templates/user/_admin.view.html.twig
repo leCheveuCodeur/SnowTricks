@@ -1,16 +1,24 @@
 <div class="container-xxl">
-	<nav>
-		<div class="nav nav-tabs" id="nav-tab" role="tablist">
-			<button class="nav-link active" id="nav-new-trick-tab" data-bs-toggle="tab" data-bs-target="#nav-new-trick" type="button" role="tab" aria-controls="nav-new-trick" aria-selected="true">Nouveaux Tricks</button>
-			<button class="nav-link" id="nav-new-contribution-tab" data-bs-toggle="tab" data-bs-target="#nav-new-contribution" type="button" role="tab" aria-controls="nav-new-contribution" aria-selected="false">Nouvelles Contributions</button>
-			<button class="nav-link" id="nav-my-tricks-tab" data-bs-toggle="tab" data-bs-target="#nav-my-tricks" type="button" role="tab" aria-controls="nav-my-tricks" aria-selected="false">Mes Tricks</button>
-			<button class="nav-link" id="nav-contributors-tricks-tab" data-bs-toggle="tab" data-bs-target="#nav-contributors-tricks" type="button" role="tab" aria-controls="nav-contributors-tricks" aria-selected="false">Tricks des Contributeurs</button>
-		</div>
-	</nav>
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active" id="new-tricks-tab" data-bs-toggle="tab" data-bs-target="#new-tricks" type="button" role="tab" aria-controls="new-tricks" aria-selected="true">Nouveaux Tricks</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="new-contributions-tab" data-bs-toggle="tab" data-bs-target="#new-contributions" type="button" role="tab" aria-controls="new-contributions" aria-selected="false">Nouvelles Contributions</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="my-tricks-tab" data-bs-toggle="tab" data-bs-target="#my-tricks" type="button" role="tab" aria-controls="my-tricks" aria-selected="false">Mes Tricks</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="contributors-tricks-tab" data-bs-toggle="tab" data-bs-target="#contributors-tricks" type="button" role="tab" aria-controls="contributors-tricks" aria-selected="false">Tricks des Contributeurs</button>
+		</li>
+	</ul>
+
 	<div
-		class="tab-content" id="nav-tabContent">
-		{# New Tricks ----------------------------------------------------#}
-		<div class="tab-pane fade show active" id="nav-new-trick" role="tabpanel" aria-labelledby="nav-new-trick-tab">
+		class="tab-content" id="myTabContent">
+		{# New Tricks ---------------------------------------------------- #}
+		<div class="tab-pane fade show active" id="new-tricks" role="tabpanel" aria-labelledby="new-tricks-tab">
 			<h1 class="text-center admin-title">- Nouveaux Tricks en attentes de traitement :
 				<span class="text-warning">{{ newTricks|length }}</span>
 				-</h1>
@@ -40,7 +48,7 @@
 									</td>
 									<td>
 										<a href="{{path('contribution_view', {id: contribution.id})}}" class="btn btn-primary bi bi-eye">
-											Afficher</a>
+											</a>
 									</td>
 								</tr>
 							{% endfor %}
@@ -49,19 +57,18 @@
 				</div>
 			{% endif %}
 		</div>
-
-		{# New Contribs ----------------------------------------------------#}
-		<div class="tab-pane fade" id="nav-new-contribution" role="tabpanel" aria-labelledby="nav-new-contribution-tab">
+		{# New Contributions ---------------------------------------------------- #}
+		<div class="tab-pane fade" id="new-contributions" role="tabpanel" aria-labelledby="new-contributions-tab">
 			{% include "user/panel/_contributions.html.twig" %}
 		</div>
-
-		{# My Tricks ----------------------------------------------------#}
-		<div class="tab-pane fade" id="nav-my-tricks" role="tabpanel" aria-labelledby="nav-my-tricks-tab">
+		{# My Tricks ---------------------------------------------------- #}
+		<div class="tab-pane fade" id="my-tricks" role="tabpanel" aria-labelledby="my-tricks-tab">
 			{% include "user/panel/_my_tricks.html.twig" %}
 		</div>
-
-		{# Contributors Tricks ----------------------------------------------------#}
-		<div class="tab-pane fade" id="nav-contributors-tricks" role="tabpanel" aria-labelledby="nav-contributors-tricks-tab">
+		{# Contributors Tricks ---------------------------------------------------- #}
+		<div class="tab-pane fade" id="contributors-tricks" role="tabpanel" aria-labelledby="contributors-tricks-tab">
 			{% include "user/panel/_contributors_tricks.html.twig" %}
 		</div>
 	</div>
+
+</div>
