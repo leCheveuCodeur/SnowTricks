@@ -12,7 +12,7 @@ function create(htmlStr) {
 window.onload = () => {
 	var collectionHolder = document.getElementById("medias");
 	var existingMedias = document.querySelectorAll(".card[data-target]");
-	var mediasIndex = parseInt(collectionHolder.dataset.index);
+	var mediasIndex = parseInt(collectionHolder.dataset.index, 10);
 
 	var removedButtons = [];
 	var requiredsFields = [];
@@ -132,7 +132,6 @@ window.onload = () => {
 		let selectImageInFront = document.getElementById(
 			"contribution_image_in_front"
 		);
-		console.log(selectImageInFront, requiredsFields);
 		requiredsFields.forEach((requiredField) => {
 			if (
 				requiredField.hasAttribute("type") &&
@@ -140,7 +139,6 @@ window.onload = () => {
 				fileFields.has(requiredField) === false
 			) {
 				fileFields.add(requiredField);
-				console.log(requiredField, fileFields);
 				requiredField.addEventListener("change", (e) => {
 					let fileName = e.target.files[0].name;
 
@@ -210,14 +208,14 @@ window.onload = () => {
 		);
 		removedButtons.push(removedButton);
 
-		let new_inputs = [
+		let newInputs = [
 			...document.querySelectorAll(
 				"[id*='" +
 					((isImage ? "images_" : "videos_") + mediasIndex) +
 					"_'][required='required']"
 			),
 		];
-		new_inputs.forEach((input) => {
+		newInputs.forEach((input) => {
 			requiredsFields.push(input);
 		});
 
@@ -241,7 +239,6 @@ window.onload = () => {
 		requiredsFields.forEach((field) => {
 			if (field.value === "" || field.validity.patternMismatch) {
 				invalidsFields.add(field);
-				console.log("invalid field", field);
 				if (
 					field.dataset.type === "img" ||
 					field.dataset.type === "video"
@@ -279,7 +276,6 @@ window.onload = () => {
 		invalidedCards.forEach((card) => {
 			card.classList.add("border", "border-1", "border-danger");
 			if ([...existingMedias][card.dataset.id]) {
-				console.log("card copy", card);
 				let copyStyleCard =
 					card.firstElementChild.getAttribute("style");
 				copyStyleCard = copyStyleCard.replace(
@@ -288,7 +284,6 @@ window.onload = () => {
 				);
 				card.firstElementChild.setAttribute("style", copyStyleCard);
 			} else {
-				console.log("card 2 copy", card);
 				card.firstElementChild.removeAttribute("style");
 				card.firstElementChild.classList.add(
 					"card-" + card.dataset.type + "-invalid"
@@ -302,7 +297,6 @@ window.onload = () => {
 				if (e.target.value.length >= 1) {
 					e.target.classList.remove("is-invalid");
 					invalidsFields.delete(e.target);
-					console.log("remove field", e.target);
 					if (
 						[...invalidsFields].filter(
 							(item) => item.dataset.id === e.target.dataset.id
@@ -311,7 +305,6 @@ window.onload = () => {
 						let card = [...invalidedCards].filter(
 							(item) => item.dataset.id === e.target.dataset.id
 						)[0];
-						console.log("card remove", card);
 						card.classList.remove(
 							"border",
 							"border-1",
