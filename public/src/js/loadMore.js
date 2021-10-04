@@ -1,16 +1,14 @@
 window.onload = () => {
-	function LoadMore(targetIdName) {
+	function loadMore(targetIdName) {
 		let page = 1;
 
 		const btnLoadMore = document.getElementById("loadMore");
 		btnLoadMore.addEventListener("click", (e) => {
 			page++;
-			console.log(page);
 			// On récupère l'url active
 			const Url = new URL(window.location.href);
 			// On lance la requête ajax
 			let url = Url.pathname === "/" ? page : Url.pathname + "/" + page;
-			console.log(url);
 			fetch(url, {
 				headers: {
 					"X-Requested-With": "XMLHttpRequest",
@@ -22,7 +20,6 @@ window.onload = () => {
 					const content = document.getElementById(
 						targetIdName.toString()
 					);
-					console.log(content);
 
 					// On remplace le contenu
 					content.innerHTML = data.content;
@@ -39,7 +36,7 @@ window.onload = () => {
 		});
 	}
 
-	LoadMore("comments");
+	loadMore("comments");
 
-	LoadMore("tricks");
+	loadMore("tricks");
 };

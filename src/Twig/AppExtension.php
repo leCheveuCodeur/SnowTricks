@@ -20,9 +20,8 @@ class AppExtension extends AbstractExtension
     {
         if (!isset($subject)) {
             return null;
-        } else {
-            return preg_replace($pattern, $replacement, $subject);
         }
+        return preg_replace($pattern, $replacement, $subject);
     }
 
     /**

@@ -12212,6 +12212,7 @@ thead th {
   max-width: 600px;
   width: 100%;
   margin: 10px 0;
+  z-index: 1;
 }
 
 .nav-link.active {

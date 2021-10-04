@@ -26,7 +26,7 @@ class CommentRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('c')
             ->where('c.trick = :trickId')
             ->setParameter('trickId', $trickId)
-            ->setFirstResult(intval($page) * $limit - $limit)
+            ->setFirstResult((int) $page * $limit - $limit)
             ->setMaxResults($limit)
             ->orderBy('c.date', $order);
         return $query->getQuery()->getResult();
@@ -41,5 +41,5 @@ class CommentRepository extends ServiceEntityRepository
             ->orderBy('c.date', $order);
         return $query->getQuery()->getResult();
     }
-    
+
 }
