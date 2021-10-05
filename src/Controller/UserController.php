@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\ContributionRepository;
 use App\Repository\TrickRepository;
+use App\Repository\ContributionRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -18,10 +18,6 @@ class UserController extends AbstractController
      */
     public function viewAdminPanel(TrickRepository $trickRepository, ContributionRepository $contributionRepository): Response
     {
-        /** @var User */
-        $user = $this->getUser();
-        $userId = $user->getId();
-
         $tricks = $trickRepository->findAll();
         if ($this->isGranted(User::ROLE_ADMIN)) {
             /** @var Contribution[] */
@@ -29,7 +25,6 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/admin_panel.html.twig', [
-            'user' => $user,
             'tricks' => $tricks,
             'newTricks' => $newTricks ?? false
         ]);

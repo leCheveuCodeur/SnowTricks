@@ -13,27 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class ImageType extends AbstractType
 {
-    private $requestStack;
 
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Request */
-        $request = $this->requestStack->getCurrentRequest();
-
-        // index in the iterative builder
-        $index = intval($builder->getName());
-        /** @var UploadedFile */
-        $hasFile = $request->files->get('contribution')['images'][$index - 1]['file_name'] ?? false;
-
         $builder
             ->add(
                 'title',
@@ -76,10 +61,7 @@ class ImageType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $formEvent) {
             $imageData = $formEvent->getData();
-            // Limit the number of characters in the title
-            if (\strlen($imageData['title']) > 70) {
-                $imageData['title'] = \substr($imageData['title'], 0, 70);
-            }
+
             if (!\key_exists('originalFileName', $imageData)) {
                 /** @var UploadedFile */
                 $file = $imageData['file_name'];

@@ -44,7 +44,7 @@ class ContributionType extends AbstractType
         $isExistantTrick = $contribution->getTrick() ?? \false;
 
         $this->trick = $contribution->getTrick();
-        
+
         /** @var Image */
         $imagesInContribution = $contribution->getImages();
 
@@ -132,23 +132,21 @@ class ContributionType extends AbstractType
 
         if ($imagesInRequest) {
             foreach ($imagesInRequest as $key => $image) {
-                if (\key_exists('in_front', $image) && !$image['in_front']) {
-                    if ($image['imageTarget'] && \key_exists('title', $image)) {
-                        $choiceList[$image['title']] = $key;
-                        $choiceAttr[$image['title']] = ['data-id' => $key];
-                    }
+                if (\key_exists('in_front', $image) && !$image['in_front'] && $image['imageTarget'] && \key_exists('title', $image)) {
+                    $choiceList[$image['title']] = $key;
+                    $choiceAttr[$image['title']] = ['data-id' => $key];
                 } else if (!\key_exists('in_front', $image)) {
                     /** @var UploadedFile */
                     $file = $filesInResquest[$key]['file_name'];
-                    $choiceList[$file->getClientOriginalName()] = $key;
+                    $choiceList[$file->getClientOriginalName()] = $file->getClientOriginalName();
                     $choiceAttr[$file->getClientOriginalName()] = ['data-id' => $key];
                 }
             }
         } else {
             /** @var Image $image*/
             foreach ($imagesInContribution as $key => $image) {
-                $choiceList[$image->getOriginalFileName()] = $key;
-                $choiceAttr[$image->getOriginalFileName()] = ['data-id' => $key];
+                $choiceList[$image->getFileName()] = $image->getFileName();
+                $choiceAttr[$image->getFileName()] = ['data-id' => $key];
             }
         }
 

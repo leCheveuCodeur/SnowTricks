@@ -129,6 +129,10 @@ class Contribution
 
     public function setLeadIn(string $lead_in): self
     {
+        if (strlen($lead_in) > 160) {
+            $lead_in = \substr($lead_in, 0, 160);
+        }
+
         $this->lead_in = $lead_in;
 
         return $this;
@@ -141,6 +145,10 @@ class Contribution
 
     public function setTitle(?string $title): self
     {
+        if (strlen($title) > 70) {
+            $title = \substr($title, 0, 70);
+        }
+
         $this->title = $title;
 
         return $this;
