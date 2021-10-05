@@ -8,7 +8,7 @@ the goal of this project is to create a collaborative website with the [Symfony]
 
 ## How it work
 
-![Snowtricks](Snowtricks.gif)
+![Snowtricks](SnowTricks.gif)
 
 ## Build with
 
