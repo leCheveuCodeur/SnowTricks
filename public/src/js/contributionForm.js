@@ -140,6 +140,7 @@ window.onload = () => {
 			) {
 				fileFields.add(requiredField);
 				requiredField.addEventListener("change", (e) => {
+					console.log(e.target);
 					let fileName = e.target.files[0].name;
 
 					let optionSelect =
@@ -236,9 +237,11 @@ window.onload = () => {
 
 		// detect all invalidedCards with null fields
 		// (when loading the page, it only detects file fields that are reset after each submission and are therefore null).
+		console.log(invalidsFields);
 		requiredsFields.forEach((field) => {
 			if (field.value === "" || field.validity.patternMismatch) {
 				invalidsFields.add(field);
+				console.log(invalidsFields);
 				if (
 					field.dataset.type === "img" ||
 					field.dataset.type === "video"
@@ -386,8 +389,7 @@ window.onload = () => {
 	displayingRemainingsCharacters();
 
 	updateListOfImagesInFront();
-
-	if (document.querySelector("[data-new-trick='1']") === false) {
+	if (document.querySelector("[data-new-trick='1']") === null) {
 		fieldsColoration();
 	}
 	//---------------------------------------------------------------------------

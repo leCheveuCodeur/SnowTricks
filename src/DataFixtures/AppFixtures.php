@@ -50,17 +50,17 @@ class AppFixtures extends Fixture
 
         $tricks = [
             [
-                "admin@gmail.com", "Frontside 720", $categories[1], "une rotation de 2 tours en frontside", "",
+                $_ENV['ADMIN_EMAIL'], "Frontside 720", $categories[1], "une rotation de 2 tours en frontside", "",
                 ["colin-lloyd-CVB44XCYyHA-unsplash-6106326bf0da6.jpg", "colin-lloyd-pzZmPqPdAIE-unsplash-6106326bf271c.jpg"],
                 ["https://www.youtube.com/embed/1vtZXU15e38", "https://youtu.be/H2MKP1epC7k"]
             ],
             [
-                "admin@gmail.com", "Frontside 540",  $categories[1], "saut où l’on fait un tour et demi en l’air", "",
+                $_ENV['ADMIN_EMAIL'], "Frontside 540",  $categories[1], "saut où l’on fait un tour et demi en l’air", "",
                 ["damiano-lingauri-OKBP1D8Wr4c-unsplash-61063372b108a.jpg"],
                 ["https://youtu.be/FMHiSF0rHF8"]
             ],
             [
-                "admin@gmail.com", "Nose Grab",  $categories[0], "consiste à saisir la pointe avant de la planche lors d'un saut", "",
+                $_ENV['ADMIN_EMAIL'], "Nose Grab",  $categories[0], "consiste à saisir la pointe avant de la planche lors d'un saut", "",
                 ["pexels-pixabay-209817-610634b493deb.jpg"],
                 ["https://youtu.be/M-W7Pmo-YMY"]
             ],
@@ -103,13 +103,13 @@ class AppFixtures extends Fixture
 
         // Admin User
         $admin = new User;
-        $hash = $this->encoder->hashPassword($admin, 'password');
+        $hash = $this->encoder->hashPassword($admin, $_ENV['ADMIN_PASSWORD']);
 
-        $admin->setPseudo('Admin')
-            ->setEmail('admin@gmail.com')
+        $admin->setPseudo($_ENV['ADMIN_PSEUDO'])
+            ->setEmail($_ENV['ADMIN_EMAIL'])
             ->setPassword($hash)
             ->setIsVerified(\true)
-            ->setRoles([User::ROLE_ADMIN, User::ROLE_AUTHOR]);
+            ->setRoles([User::ROLE_ADMIN]);
         $manager->persist($admin);
 
         // 5 Users

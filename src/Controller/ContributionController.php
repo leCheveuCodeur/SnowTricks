@@ -63,6 +63,11 @@ class ContributionController extends AbstractController
                     ->setOriginalFileName($image->getOriginalFileName())
                     ->setInFront($image->getInFront());
                 $trick->addImage($copyImage);
+
+                // adds a fake value to prevent ContributionRemoveListener from deleting the download file
+                if (!$image->getImageTarget()) {
+                    $image->setImageTarget(1);
+                }
             }
             /** @var Video $video */
             foreach ($contribution->getVideos() as $video) {
@@ -88,7 +93,7 @@ class ContributionController extends AbstractController
 
         $this->addFlash('success', 'Et voilà ! La Contribution à bien été prise en compte');
 
-        return $this->redirectToRoute('user_admin_panel');
+        return $this->redirectToRoute('user_admin_panel', [],);
     }
 
     /**
@@ -212,7 +217,7 @@ class ContributionController extends AbstractController
 
         if ($formView->isSubmitted() && $formView->isValid()) {
             if ($formView->get('image_in_front')) {
-                $newImageInFront = intval($formView->get('image_in_front')->getData());
+                $newImageInFront = $formView->get('image_in_front')->getData();
             }
             /** @var Form */
             $imagesForm = $formView->get('images');
@@ -229,7 +234,7 @@ class ContributionController extends AbstractController
                 }
 
                 if (isset($newImageInFront)) {
-                    if ($newImageInFront === $key) {
+                    if ($newImageInFront === $image->getOriginalFileName()) {
                         $image->setInFront(1);
                     } else {
                         $image->setInFront(\null);

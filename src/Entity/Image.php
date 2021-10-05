@@ -72,6 +72,10 @@ class Image
 
     public function setTitle(string $title): self
     {
+        if (strlen($title) > 70) {
+            $title = \substr($title, 0, 70);
+        }
+
         $this->title = $title;
 
         return $this;
@@ -118,7 +122,7 @@ class Image
         return $this->imageTarget;
     }
 
-    public function setImageTarget(?int $imageTarget): self
+    public function setImageTarget(?int $imageTarget = null): self
     {
         $this->imageTarget = $imageTarget;
 
