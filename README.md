@@ -32,29 +32,54 @@ the goal of this project is to create a collaborative website with the [Symfony]
 
 ## Installation
 
-* **Clone or download the repository**, and put files into your environment,
+### **Clone or download the repository**, and put files into your environment,
 
-  ```
-  https://github.com/leCheveuCodeur/SnowTricks.git
-  ```
-* Install libraries with **composer**,
-
-  ```
-  composer install
-  ```
-* Configure tour environment with `.env` file:
-
-  ```
-  ###> symfony/mailer https://symfony.com/doc/current/mailer.html#transport-setup ###
-  # MAILER_DSN=smtp://localhost
-  ###< symfony/mailer ###
-
-  # DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8"
+```
+https://github.com/leCheveuCodeur/SnowTricks.git
+```
 
 
-  ###> Admin configuration, used in fixtures loading ###
-  ADMIN_PSEUDO='Admin'
-  ADMIN_EMAIL='your@email.com'
-  ADMIN_PASSWORD='yourPassword'
-  ```
-* And Voilà !
+### Install libraries with **composer**,
+
+```
+composer install
+```
+
+### Configure your environment with `.env` file :
+
+```
+###> symfony/mailer https://symfony.com/doc/current/mailer.html#transport-setup ###
+# MAILER_DSN=smtp://localhost
+###< symfony/mailer ###
+
+# DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8"
+
+
+###> Admin configuration, used in fixtures loading ###
+ADMIN_PSEUDO='Admin'
+ADMIN_EMAIL='your@email.com'
+ADMIN_PASSWORD='yourPassword'
+```
+
+
+### Initialise your Database :
+
+1 - create your database :
+
+````
+php bin/console d:d:c
+````
+
+2 - create the structure in your database :
+
+```
+php bin/console d:m:m
+```
+
+3 - and install fixturesfor have first contents and your Admin account :
+
+```
+php bin/console d:f:l -n
+```
+
+### And Voilà !
