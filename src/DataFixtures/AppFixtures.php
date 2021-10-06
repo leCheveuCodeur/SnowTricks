@@ -121,7 +121,7 @@ class AppFixtures extends Fixture
                 ->setEmail("user$u@gmail.com")
                 ->setPassword($hash)
                 ->setIsVerified(\true)
-                ->setRoles([User::ROLE_USER, User::ROLE_AUTHOR]);
+                ->setRoles([User::ROLE_AUTHOR]);
 
             $manager->persist($user);
         }
