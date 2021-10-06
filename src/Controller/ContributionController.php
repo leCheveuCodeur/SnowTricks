@@ -242,6 +242,14 @@ class ContributionController extends AbstractController
                 }
             }
 
+            /** @var User */
+            $user = $this->getUser();
+            if (!$this->isGranted('ROLE_CONTRIBUTOR')) {
+                $user->setRoles([User::ROLE_CONTRIBUTOR]);
+            }
+            
+            $em->persist($user);
+
             $contribution->setDate()
                 ->setUser($this->getUser());
 
