@@ -52,12 +52,17 @@ class RegistrationController extends AbstractController
                 'app_verify_email',
                 $user,
                 (new TemplatedEmail())
-                    ->from(new Address('mailer@your-domain.com', 'SnowTricks'))
+                    ->from(new Address($_ENV['EMAIL_CONTACT'], 'SnowTricks'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('SnowTricks|Confirme ton email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
+
+            $this->addFlash(
+                'success',
+                'Un email vient de t\'être envoyé afin de validé ton compte, surveille ta boite mail ainsi que tes spams 📧'
+            );
 
             return $this->redirectToRoute('app_login');
         }
@@ -92,7 +97,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        $this->addFlash('success', 'Bravo, ton compte à bien été activé !');
+        $this->addFlash('success', 'Bravo, ton compte a bien été activé !');
 
         return $this->redirectToRoute('app_login');
     }
