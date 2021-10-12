@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class ContributionType extends AbstractType
 {
@@ -170,6 +171,13 @@ class ContributionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Contribution::class,
+            'constraints' => [
+                new UniqueEntity([
+                    'fields' => 'title',
+                    'repositoryMethod' => 'getUnicityOfTitle',
+                    'message' => 'Un Trick possède déjà ce titre'
+                ])
+            ]
         ]);
     }
 }
