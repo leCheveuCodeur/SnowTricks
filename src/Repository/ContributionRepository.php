@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Contribution;
+use App\Entity\Trick;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -32,5 +33,10 @@ class ContributionRepository extends ServiceEntityRepository
     {
         return Criteria::create()
             ->andWhere(Criteria::expr()->eq('trick', null));
+    }
+
+    public function getUnicityOfTitle(array $criteria)
+    {
+        return $this->_em->getRepository(Trick::class)->findBy($criteria);
     }
 }

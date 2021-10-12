@@ -247,7 +247,7 @@ class ContributionController extends AbstractController
             if (!$this->isGranted('ROLE_CONTRIBUTOR')) {
                 $user->setRoles([User::ROLE_CONTRIBUTOR]);
             }
-            
+
             $em->persist($user);
 
             $contribution->setDate()
