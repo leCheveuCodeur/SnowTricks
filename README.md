@@ -4,7 +4,13 @@
 
 This project is the 6th project of the [Developer PHP / Symfony](https://openclassrooms.com/fr/paths/59-developpeur-dapplication-php-symfony) formation of [Openclassrooms](https://openclassrooms.com/).
 
-the goal of this project is to create a collaborative website with the [Symfony](https://symfony.com/https://) framework and official bundles.
+The goal of this project is to create a collaborative website with the [Symfony](https://symfony.com/https://) framework.
+
+I chose on this project to push the collaborative model to the level of Wikipedia.
+
+Where it was required that each person can create and modify his own articles, I added the possibility for third parties to contribute on any article.
+The author will have the role to validate the contribution or not.
+And the Admin of the site will only validate any contribution of a new artilce.
 
 ## How it work
 
@@ -38,7 +44,6 @@ the goal of this project is to create a collaborative website with the [Symfony]
 https://github.com/leCheveuCodeur/SnowTricks.git
 ```
 
-
 ### Install libraries with **composer**,
 
 ```
@@ -59,8 +64,10 @@ composer install
 ADMIN_PSEUDO='Admin'
 ADMIN_EMAIL='your@email.com'
 ADMIN_PASSWORD='yourPassword'
-```
 
+###> Email for contact ###
+EMAIL_CONTACT='mailer@your-domain.com'
+```
 
 ### Initialise your Database :
 
